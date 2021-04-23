@@ -1,0 +1,12 @@
+#COMPILADOR
+CC=gcc
+#OPCAO DE COMPILACAO
+CFLAGS=-I.
+#INFORMA ARQUIVO HEAD PARA VERIFICAR MODIFICACAO
+DEPS = hellomake.h
+#GERA O ARQUIVO OBJETO (.o) E FAZ A DEDPENDENCIA DO ARQUIVO .o E .c
+%.o: %.c $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+#GERA O EXECUTAVEL PELA FUNCAO MAKE
+make_ex: hellomake.o hellofunc.o
+	$(CC) -o make_ex hellomake.o hellofunc.o $(CFLAGS)
