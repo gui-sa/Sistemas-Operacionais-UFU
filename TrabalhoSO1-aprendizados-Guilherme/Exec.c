@@ -3,7 +3,8 @@
 #include <unistd.h>
 
 
-
+//https://stackoverflow.com/questions/30274356/can-we-pass-variables-from-one-c-program-to-another-c-program
+//Nao podemos passar uma var para outro programa pelo problema de que processos sao independentes entre si (exceto que essa var seja global e compartilhada)
 
 int main (int argc, char *argv[]){
 
@@ -22,11 +23,11 @@ int main (int argc, char *argv[]){
 	//argc = number of parameters
 
 
-	//Para que ele fique igual:
-	//	char *const arg[] = {"teste","printa isso daqui...",NULL};
+	//Para que o print seja igual tanto no cmd tanto no execv:
+	//char *const arg[] = {"teste","printa isso daqui...",NULL};
 
-	//https://stackoverflow.com/questions/10878128/are-argc-argv-useless-in-windows
-	//Desta maneira o argc e argv nao eh inutil no windows...
+	//Interessante! https://stackoverflow.com/questions/10878128/are-argc-argv-useless-in-windows
+	//	Apesar do argc e argv ter praticidade mesmo no linux, isso funciona no windows tambem! (via cmd) Ou seja, quando rodamos um codigo que usar argc e argv de outros codigos via windows, ele funciona normal... CUIDADO: a lib unistd eh natural do linux... entao no caso, isso daria problema la por causa disso.
 
 	printf("\nAcabou-se\n");	
 	
