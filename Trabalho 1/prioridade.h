@@ -10,14 +10,15 @@ void prioridadeNP(processo *p){
     processo aux;
 
     for (int j =0; j < N; j++){
-        for (int i = 0; i < N; i++){
-            if (p[j].prioridade < p[i].prioridade){
+        for (int i = j+1; i < N; i++){
+            if (p[j].prioridade > p[i].prioridade){
                 aux = p[j];
                 p[j] = p[i];
                 p[i] = aux;
             }
         }
     }
+
 
     printf("\n\nvetor ordenado:\n");
     for (int i=0;i<N;i++){ //só pra ver se funcionou
