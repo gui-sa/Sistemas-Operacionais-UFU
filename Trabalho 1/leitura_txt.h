@@ -49,12 +49,19 @@ int TxtRead(int N, processo *p, char *path){
             contador++;
         }
 
-        /*
-        for (i=0;i<N;i++){ //DEBUG -  printando struct BCP
+        
+        /*for (i=0;i<N;i++){ //DEBUG -  printando struct BCP
             printf("o nome do processo %i eh: %s\n",i,p[i].nome);
             printf("o burst do processo %i eh: %i\n",i,p[i].burst);
             printf("a prioridade do processo %i eh: %i\n\n",i,p[i].prioridade);
         }*/
+        for (i=0;i<N;i++){ //só pra ver se funcionou
+		printf("o nome do processo [ID=%d] eh: %s\n",p[i].ID,p[i].nome);
+		printf("o burst do processo [ID=%d] eh: %d\n",p[i].ID,p[i].burst);
+		printf("o status do processo [ID=%d] eh: %c\n",p[i].ID,p[i].status);
+		printf("a prioridade do processo [ID=%d] eh: %i\n\n",p[i].ID,p[i].prioridade);
+	}
+        
     }
     else{
         printf("\nERRO: Não foi possivel abrir o arquivo (not found)\n");

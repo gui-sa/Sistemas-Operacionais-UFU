@@ -9,7 +9,7 @@ Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
 void FCFS(int N,processo *p){
     
     //A funcao TxtRead ja ordena os vetores em um formato First Come First Served
-    for (int i=0;i<N;i++){
+    for (int i=0;i<N;i++){//prepara todos os processos para a fila de pronto
         p[i].status = 'p';
     }
 
@@ -43,8 +43,8 @@ void FCFS(int N,processo *p){
 	printf("a prioridade do processo [ID=%d] eh: %i\n\n",p[i].ID,p[i].prioridade);
     }
 
-    printf("\nCPU INATIVA\n");
-    printf("\nCPU INATIVA\n");
+    printf("\a\n\tCPU INATIVA\n\n");
+    
 
     printf("ESTATISTICAS:\n\n");
     for (int i=0;i<N;i++){//DEBUG

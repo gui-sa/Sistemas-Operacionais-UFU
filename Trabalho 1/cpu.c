@@ -15,7 +15,7 @@ void ProximaTarefa (processo *p,int *t){
 		printf(" progresso [ID=%d]:%d/%d",p->ID, i, p->burst);
 		for(int j=1; j<=i; j++) printf("# ");
 		for(int j=i+1; j<=p->burst; j++) printf("- ");
-		printf("\n");
+		printf("\n\a");
 		*t = *t+1;
 		sleep(1);
 	}
