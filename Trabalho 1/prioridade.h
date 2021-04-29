@@ -19,6 +19,12 @@ void prioridadeNP(int N, processo *p){
         }
     }
 
+    unsigned t=0; //tempo, controle da estatistica
+    estatistica *conta;
+    conta = malloc(N*sizeof(estatistica));
+    for (int i=0;i<N;i++){
+        conta[i].t_enter = 0;//Todos os processos entram no mesmo instante.
+    }
 
     printf("\n\nvetor ordenado:\n");
     for (int i=0;i<N;i++){ //só pra ver se funcionou
@@ -28,7 +34,31 @@ void prioridadeNP(int N, processo *p){
 	printf("a prioridade do processo [ID=%d] eh: %i\n\n",p[i].ID,p[i].prioridade);
     }
 
+//Aqui vai ficar a parte que faz a chamada da CPU.c... Nao se esqueca de por o controle de estatistica.
 
+    printf("ESTATISTICAS:\n\n");
+    for (int i=0;i<N;i++){
+	printf("Tempo entrada na fila do pronto para o processo [ID=%d] eh: %d\n",conta[i].ID,conta[i].t_enter);
+	printf("Tempo de inicio de execucao para o processo [ID=%d] eh: %d\n",conta[i].ID,conta[i].t_init);
+	printf("Tempo de inicio de retorno para o processo [ID=%d] eh: %d\n",conta[i].ID,conta[i].t_end);
+    }
+
+    FILE* arqNome = fopen("estatistica_prioridade.txt","w");
+    float media_retorno = 0;
+    float media_inicio = 0;
+    for (int i=0;i<N;i++){
+	fprintf(arqNome,"Tempo entrada na fila do pronto para o processo [ID=%d] eh: %d\n",conta[i].ID,conta[i].t_enter);
+	fprintf(arqNome,"Tempo de inicio de execucao para o processo [ID=%d] eh: %d\n",conta[i].ID,conta[i].t_init);
+	fprintf(arqNome,"Tempo de inicio de retorno para o processo [ID=%d] eh: %d\n",conta[i].ID,conta[i].t_end);
+	media_retorno = media_retorno+(conta[i].t_init-conta[i].t_enter);
+	media_inicio = media_inicio+(conta[i].t_end-conta[i].t_enter);	
+    }
+    media_retorno = media_retorno/N;
+    media_inicio = media_inicio/N;
+    fprintf(arqNome,"\n\nTempo medio de inicio eh: %f\n",media_inicio);
+    fprintf(arqNome,"Tempo medio de retorno eh: %f\n",media_retorno);
+    fclose(arqNome);
     free(p);
+    free(conta);
 }
 

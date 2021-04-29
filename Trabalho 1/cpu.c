@@ -8,7 +8,7 @@ Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
 
 #include <unistd.h>
 
-void ProximaTarefa (processo *p){
+void ProximaTarefa (processo *p,int *t){
     p->status = 'e';
     int i;
     for ( i=1; i<=p->burst; i++){
@@ -16,6 +16,7 @@ void ProximaTarefa (processo *p){
 		for(int j=1; j<=i; j++) printf("# ");
 		for(int j=i+1; j<=p->burst; j++) printf("- ");
 		printf("\n");
+		*t = *t+1;
 		sleep(1);
 	}
     p->status = 'f';

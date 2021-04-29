@@ -10,3 +10,13 @@ struct BCP{
 
 typedef struct BCP processo;
 
+
+struct statistics{
+	unsigned int ID ;
+	unsigned int t_enter;
+	unsigned int t_init;
+	unsigned int t_end;
+};
+
+typedef struct statistics estatistica;
+
