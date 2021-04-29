@@ -1,0 +1,34 @@
+Tempo entrada na fila do pronto para o processo [ID=0] eh: 0
+Tempo de inicio de execucao para o processo [ID=0] eh: 0
+Tempo de retorno para o processo [ID=0] eh: 20
+Tempo entrada na fila do pronto para o processo [ID=1] eh: 0
+Tempo de inicio de execucao para o processo [ID=1] eh: 20
+Tempo de retorno para o processo [ID=1] eh: 35
+Tempo entrada na fila do pronto para o processo [ID=2] eh: 0
+Tempo de inicio de execucao para o processo [ID=2] eh: 35
+Tempo de retorno para o processo [ID=2] eh: 37
+Tempo entrada na fila do pronto para o processo [ID=3] eh: 0
+Tempo de inicio de execucao para o processo [ID=3] eh: 37
+Tempo de retorno para o processo [ID=3] eh: 52
+Tempo entrada na fila do pronto para o processo [ID=4] eh: 0
+Tempo de inicio de execucao para o processo [ID=4] eh: 52
+Tempo de retorno para o processo [ID=4] eh: 65
+Tempo entrada na fila do pronto para o processo [ID=5] eh: 0
+Tempo de inicio de execucao para o processo [ID=5] eh: 65
+Tempo de retorno para o processo [ID=5] eh: 85
+Tempo entrada na fila do pronto para o processo [ID=6] eh: 0
+Tempo de inicio de execucao para o processo [ID=6] eh: 85
+Tempo de retorno para o processo [ID=6] eh: 100
+Tempo entrada na fila do pronto para o processo [ID=7] eh: 0
+Tempo de inicio de execucao para o processo [ID=7] eh: 100
+Tempo de retorno para o processo [ID=7] eh: 102
+Tempo entrada na fila do pronto para o processo [ID=8] eh: 0
+Tempo de inicio de execucao para o processo [ID=8] eh: 102
+Tempo de retorno para o processo [ID=8] eh: 117
+Tempo entrada na fila do pronto para o processo [ID=9] eh: 0
+Tempo de inicio de execucao para o processo [ID=9] eh: 117
+Tempo de retorno para o processo [ID=9] eh: 130
+
+
+Tempo medio de inicio eh: 61.299999
+Tempo medio de retorno eh: 74.300003
