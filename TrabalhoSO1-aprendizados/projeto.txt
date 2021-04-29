@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define TAM_NOME 3 //tamanho do nome do processo
+
+struct BCP{
+    char nome [TAM_NOME];
+    unsigned int burst;
+    unsigned int prioridade;
+    unsigned int ID;
+    char status; // usar apenas um caractere (n)ovo, (p)ronto, (e)xecução, (b)loqueado, (f)inalizado.
+};
+
+typedef struct BCP processo;
+
+int main()
+{
+    int i;
+    int pri;
+    int temp;
+    int contador=0;
+    char nome[TAM_NOME];
+
+    processo def[50];//vetor de structs criado apenas para ler o arquivo .txt
+    processo aux;
+
+    FILE* arqNome = fopen("tarefas3.txt","r");
+
+    if(arqNome != NULL){
+        while(fscanf(arqNome,"%s %i %i\n",nome, &pri,&temp) != EOF){ // Ler o arquivo linha por linha, até o final do arquivo (end of file)
+            printf("%s %i %i\n",nome,pri,temp);
+            strcpy(def[contador].nome,nome);
+            def[contador].prioridade = pri;
+            def[contador].burst = temp;
+            contador++;
+        }
+    }
+    else{
+        printf("####### ERROR #######\n\nRequested file does not exist!\n\nClosing aplication.....\n");
+        return 0;
+    }
+
+    int N = contador;
+    processo p[N];//vetor de structs utilizado nas operações com as tarefas.
+
+    for (i=0 ; i<N ; i++){ //só pra ver se funcionou
+        p[i]=def[i];
+        printf("\no nome do processo %i eh: %s\n",i,p[i].nome);
+        printf("o burst do processo %i eh: %i\n",i,p[i].burst);
+        printf("a prioridade do processo %i eh: %i\n\n",i,p[i].prioridade);
+    }
+
+    for (i=0 ; i<N ; i++){
+        p[i].status = 'n';//no início todos os processos são novos.
+        p[i].ID = 0; //valor inicial aleatório
+    }
+
+    fclose(arqNome);//fecha o arquivo
+
+    return 0;
+}

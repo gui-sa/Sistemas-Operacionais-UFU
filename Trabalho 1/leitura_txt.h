@@ -6,9 +6,26 @@ Nome: Guilherme Salomao Agostini - Número: 11721EMT003
 Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
 */
 
+int QuantProc(char *path){
+    int pri, temp, contador;
+    char nome[TAM_NOME];
+    int N;
+	
+    contador = 0;
+    FILE* arqNome = fopen(path,"r");
+    if(arqNome != NULL){
+        while(fscanf(arqNome,"%s %d %d\n",nome, &pri,&temp) != EOF){// Ler o arquivo linha por linha, até o final do arquivo (end of file)
+            contador++;
+        }
+    }
+    N = contador;
+    fclose(arqNome); //fecha o arquivo
+    return N;
+}
+
 
   
-processo* TxtRead(processo *p, char *path){
+int TxtRead(int N, processo *p, char *path){
     int pri; 
     int temp;
     char nome[TAM_NOME];
@@ -42,10 +59,12 @@ processo* TxtRead(processo *p, char *path){
     else{
         printf("\nERRO: Não foi possivel abrir o arquivo (not found)\n");
         fclose(arqNome); //fecha o arquivo
-        return 0;
+        return -1;
     }
         
     fclose(arqNome); //fecha o arquivo
 
-    return p; 
+    return 0; 
 }
+
+

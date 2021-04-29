@@ -1,7 +1,4 @@
 #define TAM_NOME 3 //tamanho do nome do processo
-#define N 5 //numero de processos 
-
-//Corrigir ... N nao eh constante.
 
 struct BCP{
     char nome [TAM_NOME];

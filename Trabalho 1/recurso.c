@@ -18,7 +18,7 @@ Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
 
 
 
-void escalonador(processo *pointer, int escolha){ 
+void escalonador(int N, processo *pointer, int escolha){ 
     /*
     for (int i=0;i<N;i++){ //DEBUG -  printando struct BCP
         printf("o nome do processo %i eh: %s\n",i,pointer[i].nome);
@@ -27,10 +27,10 @@ void escalonador(processo *pointer, int escolha){
     }*/
 
     if (escolha==1){       
-         FCFS(pointer);
+        FCFS(N,pointer);
     }
     else if (escolha==2){       
-        prioridadeNP(pointer);
+        prioridadeNP(N,pointer);
     }
     else{
         printf("\nERRO: nao existe essa opcao.\n");
@@ -42,15 +42,19 @@ void escalonador(processo *pointer, int escolha){
 int main (int argc, char *argv[]){
 
 	
+    int N = QuantProc("tarefas.txt") ;
+    printf("\nN = %d\n",N);//DEBUG
+    processo *p;
+    p = malloc(N*sizeof(processo));
+    TxtRead(N, p, "tarefas.txt");
+
+
+
     int escolha;
     printf("Escolha o escalonador desejado [1] ou [2]:\n 1 - First Come First Served (FCFS)\n 2 - Prioridade Não-Preemptivo\n");
     scanf("%d", &escolha);
 
-
-
-    processo p[N];
-    TxtRead(p, "tarefas.txt");
-    escalonador(p,escolha);
+    escalonador(N,p,escolha);
 
  /*   for (int i=0;i<N;i++){ //DEBUG -  printando struct BCP
         printf("o nome do processo %i eh: %s\n",i,p[i].nome);

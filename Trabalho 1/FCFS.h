@@ -6,7 +6,7 @@ Nome: Guilherme Salomao Agostini - Número: 11721EMT003
 Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
 */
 
-void FCFS(processo *p){
+void FCFS(int N,processo *p){
     
     //A funcao TxtRead ja ordena os vetores em um formato First Come First Served
     for (int i=0;i<N;i++){
@@ -36,5 +36,6 @@ void FCFS(processo *p){
 
     printf("\nCPU INATIVA\n");
     printf("\nCPU INATIVA\n");
+    free(p);
 
 }
