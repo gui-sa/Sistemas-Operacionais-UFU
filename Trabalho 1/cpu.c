@@ -24,4 +24,3 @@ void ProximaTarefa (processo *p,int *t){
     
 	/* usar apenas um caractere (n)ovo, (p)ronto, (e)xecução, (b)loqueado, (f)inalizado.*/
 }
-

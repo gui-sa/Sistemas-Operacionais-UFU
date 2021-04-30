@@ -70,5 +70,5 @@ void FCFS(int N,processo *p){
     fclose(arqNome);
     free(p);
     free(conta);
-
+    
 }
