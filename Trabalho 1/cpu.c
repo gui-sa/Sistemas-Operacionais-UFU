@@ -1,9 +1,9 @@
 /*
 INTEGRANTES:
-Nome: Eduardo Marques da Silva - Número: 11721EMT018
-Nome: Enrico Sampaio Bonela - Número: 11721EMT007
-Nome: Guilherme Salomao Agostini - Número: 11721EMT003
-Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
+Nome: Eduardo Marques da Silva          - Número: 11721EMT018
+Nome: Enrico Sampaio Bonela             - Número: 11721EMT007
+Nome: Guilherme Salomao Agostini        - Número: 11721EMT003
+Nome: Luiz Renato Rodrigues Carneiro    - Número: 11721EMT004
 */
 
 #include <unistd.h>
@@ -21,6 +21,6 @@ void ProximaTarefa (processo *p,int *t){
 	}
     p->status = 'f';
 
-    
-	/* usar apenas um caractere (n)ovo, (p)ronto, (e)xecução, (b)loqueado, (f)inalizado.*/
+    // Lógica: (n)ovo, (p)ronto, (e)xecução, (b)loqueado, (f)inalizado.
+
 }
