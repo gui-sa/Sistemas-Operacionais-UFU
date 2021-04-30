@@ -1,0 +1,16 @@
+#COMPILADOR
+CC=gcc
+
+#OPCAO DE COMPILACAO
+CFLAGS=-I.
+
+#INFORMA ARQUIVOS HEAD PARA VERIFICAR MODIFICACAO
+DEPS = type.h leitura_txt.h cpu.c FCFS.h FCFS.c prioridade.h prioridade.c recurso.c
+ 
+#GERA O ARQUIVO OBJETO (.o) E FAZ A DEDPENDENCIA DOS ARQUIVOS .o com .h e .c
+%.o: %.c $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+	
+#GERA O EXECUTAVEL PELA FUNCAO MAKE
+ex_recurso: recurso.o
+	$(CC) -o ex_recurso recurso.o $(CFLAGS)
