@@ -1,10 +1,12 @@
-/*
+﻿/*
 INTEGRANTES:
-Nome: Eduardo Marques da Silva 	- Número: 11721EMT018
+Nome: Eduardo Marques da Silva 		- Número: 11721EMT018
 Nome: Enrico Sampaio Bonela 		- Número: 11721EMT007
 Nome: Guilherme Salomao Agostini 	- Número: 11721EMT003
 Nome: Luiz Renato Rodrigues Carneiro 	- Número: 11721EMT004
 */
+
+Consulte nosso git:  https://github.com/guilherme-salomao-agostini/random.git
 
 DOCUMENTAÇÃO:
 
