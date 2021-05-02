@@ -34,8 +34,8 @@ int TxtRead(int N, processo *p, char *path){
 
 
 	for (i=0;i<N;i++){
-		p[i].status = 'n';//no início todos os processos são novos.
-		p[i].ID = i; //evitar valor inicial aleatório
+		p[i].status = 'n';	//no início todos os processos são novos.
+		p[i].ID = i; 		//evitar valor inicial aleatório
 	}
 
 	FILE* arqNome = fopen(path,"r");
