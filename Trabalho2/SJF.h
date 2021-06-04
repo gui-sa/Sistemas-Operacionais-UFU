@@ -9,29 +9,58 @@ Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
 void SJF(int N,processo *p){
     
 
-	for (int i=0;i<N;i++){//prepara todos os processos para a fila de pronto
-		p[i].status = 'p';
-	}
+
 
 	unsigned int t=0; //tempo, controle da estatistica
 	estatistica *conta;
 	conta = malloc(N*sizeof(estatistica));
-	for (int i=0;i<N;i++){
-		conta[i].t_enter = 0;//Todos os processos entram no mesmo instante.
-	}
+
 
 	for (int i=0;i<N;i++){
 		if (p[i].status =='p'){
 			printf("\n\nvetor ordenado:\n");
-			for (int i=0;i<N;i++){ //só pra ver se funcionou
-				printf("o nome do processo [ID=%d] eh: %s\n",p[i].ID,p[i].nome);
+			for (int i=0;i<N;i++){ //DEBUG
+				printf("o tipo do processo [ID=%d] eh: ",p[i].ID);
+				if(p[i].tipo=='c'){
+					printf("CPU Bound\n");	
+				}else{
+					printf("I/O Bound\n");
+				}
 				printf("o burst do processo [ID=%d] eh: %d\n",p[i].ID,p[i].burst);
-				printf("o status do processo [ID=%d] eh: %c\n",p[i].ID,p[i].status);
-				printf("a prioridade do processo [ID=%d] eh: %i\n\n",p[i].ID,p[i].prioridade);
-			}
+				printf("o tempo burst de cpu [ID=%d] eh: %f\n",p[i].ID, round(p[i].burst*p[i].cpu/100.0));
+				printf("o tempo de entrada [ID=%d] eh: %d\n",p[i].ID,p[i].time_in);	
+				printf("o status do processo [ID=%d] eh: ",p[i].ID);
+				switch(p[i].status){
+					case 'n':
+					printf("NOVO\n");
+					break;
+
+					case 'p':
+					printf("PRONTO\n");
+					break;
+
+					case 'e':
+					printf("EXECUCAO\n");
+					break;
+
+					case 'b':
+					printf("ESPERA\n");
+					break;
+
+					case 'f':
+					printf("TERMINADO\n");
+					break;
+
+					default:
+					break;
+
+				}
+			printf("\n\n");
+			}//FINAL DO DEBUG*/
+
 			conta[i].ID = p[i].ID;
 			conta[i].t_init = t;
-			ProximaTarefa(&p[i],&t);
+			CPU(&p[i],&t);
 			conta[i].t_end = t;	
 		}
 	}

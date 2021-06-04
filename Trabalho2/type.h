@@ -4,7 +4,7 @@ struct BCP{
 	unsigned int ID;
 	unsigned int cpu;
 	char tipo; //i = I/O bound, c = cpu bound
-	char status; /* usar apenas um caractere (n)ovo, (p)ronto, (e)xecução, (b)loqueado, (f)inalizado.*/
+	char status; /* usar apenas um caractere (n)ovo, (p)ronto, (e)xecução, (b)loqueado, (f)inalizado , (i)nexistente.*/
 	unsigned int time_in;
 	unsigned int t_interrupt;	
 };

@@ -10,6 +10,9 @@ Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <math.h>
+#include <time.h> 
+#include <pthread.h>
 #include "type.h"
 #include "cpu.c"
 //#include "SJF.h"
@@ -20,7 +23,7 @@ Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
 
 void escalonador(int N, processo *p, int escolha){ 
 	
-	for (int i=0;i<N;i++){ //DEBUG
+	/*for (int i=0;i<N;i++){ //DEBUG
 		printf("o tipo do processo [ID=%d] eh: ",p[i].ID);
 		if(p[i].tipo=='c'){
 			printf("CPU Bound\n");	
@@ -28,7 +31,8 @@ void escalonador(int N, processo *p, int escolha){
 			printf("I/O Bound\n");
 		}
 		printf("o burst do processo [ID=%d] eh: %d\n",p[i].ID,p[i].burst);
-		printf("o tempo de entrada [ID=%d] eh: %d\n",p[i].ID,p[i].time_in);
+		printf("o tempo burst de cpu [ID=%d] eh: %f\n",p[i].ID, round(p[i].burst*p[i].cpu/100.0));
+		printf("o tempo de entrada [ID=%d] eh: %d\n",p[i].ID,p[i].time_in);	
 		printf("o status do processo [ID=%d] eh: ",p[i].ID);
 		switch(p[i].status){
 			case 'n':
@@ -58,6 +62,58 @@ void escalonador(int N, processo *p, int escolha){
 	printf("\n\n");
 	}//FINAL DO DEBUG*/
 
+
+	/*for (int i=0;i<N;i++){// DEBUG DO TIMER 
+		p[i].status = 'i';
+	}
+
+	clock_t start = clock();
+	double elapsed = 0;
+	clock_t current = clock();
+
+	while(elapsed <= 10){
+		current = clock();
+	    	elapsed = (double)(current - start)/CLOCKS_PER_SEC;
+		
+		for(int i=0; i<N; i++){
+		    if((p[i].time_in <= elapsed) & (p[i].status == 'i')){
+		        printf("\n elapsed = %lf\n",elapsed);
+		        p[i].status = 'n';
+		        p[i].status = 'p';
+		        printf("o tempo de entrada [ID=%d] eh: %d\n",p[i].ID,p[i].time_in);	
+		        printf("o status do processo [ID=%d] eh: ",p[i].ID);
+		        switch(p[i].status){
+		            case 'n':
+		                printf("NOVO\n");
+		            break;
+
+		            case 'p':
+		                printf("PRONTO\n");
+		            break;
+
+		            case 'e':
+		                printf("EXECUCAO\n");
+		            break;
+
+		            case 'b':
+		                printf("ESPERA\n");
+		            break;
+
+		            case 'f':
+		                printf("TERMINADO\n");
+		            break;
+
+		            default:
+		            break;
+
+		        }
+		        printf("\n\n");
+		    
+		    }
+		}
+	}//FINAL DO DEBUG*/
+
+
 	if (escolha==1){       
 		//SJF(N,pointer);
 	}
@@ -81,6 +137,7 @@ int main (int argc, char *argv[]){
 	processo *p;
 	p = malloc(N*sizeof(processo));
 	randomize_process(N,p); //Povoar nosso ponteiro de processos da forma exigida.
+	
 
 
 	int escolha;
@@ -88,22 +145,27 @@ int main (int argc, char *argv[]){
 	scanf("%d", &escolha);
 	printf("\n\n");
 
-	escalonador(N,p,escolha);
 
+	//THREAD: TIMER funcao que povoa o vetor pronto (i -> n) e (n -> p)
+	//THREAD: CPU1
+	//THREAD: CPU2	
+	
+	//escalonador(N,p,escolha);//NAO PODE TA AQUI!! --> CONSEQUENCIA // NAO EH UMA ACAO MAIS
 
+	//FECHAMENTO ESTATISTICAS
 
 	return 0;
 }  
 
     
 
-
 /*
 
   --> p 
   -->SE FOR I/O -- CPU: de p -> b
-  [ f, e, b, p, p, p, p, p]
+  [ i, i, i, i, i, i, i, i]
   -->Se for b -- I/O b -> be , ao finalizar o percentual i/o -> be para p e trocar tipo para cpu.bound
+
 
 -------------------------------------- Ideia B ------------------------------------------------------
   
@@ -112,6 +174,9 @@ int main (int argc, char *argv[]){
     |
     v
   [ f ] I/O
+
+	PROBLEMAS AO TRABALHAR COM VARIOS VETORES
+	>>PROBLEMAS: INTEGRIDADE
 
 
 */
