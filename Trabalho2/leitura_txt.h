@@ -18,6 +18,7 @@ int randomize_process(int N, processo *p){
 	for (i=0 ; i<N ; i++){
 		p[i].cpu = rand()%100;
 		if (p[i].cpu>50){
+			p[i].cpu = 100;
 			p[i].tipo = 'c';
 		} else{
 			p[i].tipo = 'i';		

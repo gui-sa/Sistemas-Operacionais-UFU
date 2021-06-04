@@ -71,6 +71,7 @@ void escalonador(int N, processo *p, int escolha){
 }
 
 
+
 int main (int argc, char *argv[]){
 
 	int N = -1;
@@ -95,3 +96,22 @@ int main (int argc, char *argv[]){
 }  
 
     
+
+
+/*
+
+  --> p 
+  -->SE FOR I/O -- CPU: de p -> b
+  [ f, e, b, p, p, p, p, p]
+  -->Se for b -- I/O b -> be , ao finalizar o percentual i/o -> be para p e trocar tipo para cpu.bound
+
+-------------------------------------- Ideia B ------------------------------------------------------
+  
+  [ p p p p p p p p] CPU1/CPU2 = sincronizacao
+    | $$ funcao atualizacao de listas  -- entrar na sincronizacao $$
+    |
+    v
+  [ f ] I/O
+
+
+*/
