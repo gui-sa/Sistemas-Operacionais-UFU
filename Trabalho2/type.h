@@ -21,3 +21,10 @@ struct statistics{
 
 typedef struct statistics estatistica;
 
+struct thread_args{
+	int Number;
+	processo *proc;
+	int esc;
+};
+
+typedef struct thread_args thread_args;

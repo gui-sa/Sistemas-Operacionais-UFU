@@ -21,112 +21,6 @@ Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
 
 
 
-void escalonador(int N, processo *p, int escolha){ 
-	
-	/*for (int i=0;i<N;i++){ //DEBUG
-		printf("o tipo do processo [ID=%d] eh: ",p[i].ID);
-		if(p[i].tipo=='c'){
-			printf("CPU Bound\n");	
-		}else{
-			printf("I/O Bound\n");
-		}
-		printf("o burst do processo [ID=%d] eh: %d\n",p[i].ID,p[i].burst);
-		printf("o tempo burst de cpu [ID=%d] eh: %f\n",p[i].ID, round(p[i].burst*p[i].cpu/100.0));
-		printf("o tempo de entrada [ID=%d] eh: %d\n",p[i].ID,p[i].time_in);	
-		printf("o status do processo [ID=%d] eh: ",p[i].ID);
-		switch(p[i].status){
-			case 'n':
-			printf("NOVO\n");
-			break;
-
-			case 'p':
-			printf("PRONTO\n");
-			break;
-
-			case 'e':
-			printf("EXECUCAO\n");
-			break;
-
-			case 'b':
-			printf("ESPERA\n");
-			break;
-
-			case 'f':
-			printf("TERMINADO\n");
-			break;
-
-			default:
-			break;
-
-		}
-	printf("\n\n");
-	}//FINAL DO DEBUG*/
-
-
-	/*for (int i=0;i<N;i++){// DEBUG DO TIMER 
-		p[i].status = 'i';
-	}
-
-	clock_t start = clock();
-	double elapsed = 0;
-	clock_t current = clock();
-
-	while(elapsed <= 10){
-		current = clock();
-	    	elapsed = (double)(current - start)/CLOCKS_PER_SEC;
-		
-		for(int i=0; i<N; i++){
-		    if((p[i].time_in <= elapsed) & (p[i].status == 'i')){
-		        printf("\n elapsed = %lf\n",elapsed);
-		        p[i].status = 'n';
-		        p[i].status = 'p';
-		        printf("o tempo de entrada [ID=%d] eh: %d\n",p[i].ID,p[i].time_in);	
-		        printf("o status do processo [ID=%d] eh: ",p[i].ID);
-		        switch(p[i].status){
-		            case 'n':
-		                printf("NOVO\n");
-		            break;
-
-		            case 'p':
-		                printf("PRONTO\n");
-		            break;
-
-		            case 'e':
-		                printf("EXECUCAO\n");
-		            break;
-
-		            case 'b':
-		                printf("ESPERA\n");
-		            break;
-
-		            case 'f':
-		                printf("TERMINADO\n");
-		            break;
-
-		            default:
-		            break;
-
-		        }
-		        printf("\n\n");
-		    
-		    }
-		}
-	}//FINAL DO DEBUG*/
-
-
-	if (escolha==1){       
-		//SJF(N,pointer);
-	}
-	else if (escolha==2){       
-		//prioridadeNP(N,pointer);
-	}
-	else{
-		printf("\nERRO: nao existe essa opcao.\n");
-	}
-
-}
-
-
 
 int main (int argc, char *argv[]){
 
@@ -145,8 +39,19 @@ int main (int argc, char *argv[]){
 	scanf("%d", &escolha);
 	printf("\n\n");
 
-
 	//THREAD: TIMER funcao que povoa o vetor pronto (i -> n) e (n -> p)
+	pthread_t timer;
+	int error;
+	thread_args thread_args1;
+	thread_args1.Number = N;
+	thread_args1.proc = p;
+	thread_args1.esc = escolha;
+
+	error = pthread_create(&timer, NULL, novo_processo, (void*) &thread_args1);
+	if (error != 0){
+		printf("Erro ao criar a thread timer");
+	}
+	pthread_join(timer,NULL);
 	//THREAD: CPU1
 	//THREAD: CPU2	
 	
@@ -178,5 +83,12 @@ int main (int argc, char *argv[]){
 	PROBLEMAS AO TRABALHAR COM VARIOS VETORES
 	>>PROBLEMAS: INTEGRIDADE
 
+
+*/
+
+
+/*
+COMPILACAO COM GCC
+>>gcc -pthread -o recurso recurso.c -lm
 
 */
