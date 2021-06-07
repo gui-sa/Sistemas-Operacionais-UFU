@@ -30,15 +30,18 @@ void *CPU(void *thread_args2){
 				break;
 			}	
 		}
-
-		p[i].status = 'e';
-		p[i].t_interrupt++;
-		printf("\nprogresso [ID=%d]:%d/%d",p[i].ID, p[i].t_interrupt, p[i].burst);
-		sleep(1);
-		p[i].status = 'p';		
-		if( p[i].t_interrupt >= p[i].burst){
-			p[i].status = 'f';
-		}
+		
+		if(i!=N){
+			p[i].status = 'e';
+			p[i].t_interrupt++;
+			printf("\nprogresso [ID=%d]:%d/%d",p[i].ID, p[i].t_interrupt, p[i].burst);
+			sleep(1);
+			p[i].status = 'p';		
+			if( p[i].t_interrupt >= p[i].burst){
+				p[i].status = 'f';
+			}
+			}
+		
 		
 		int count = 0;
 		for (int z = 0;z<N;z++){
@@ -70,7 +73,7 @@ void escalonador(int N, processo *p, int escolha){
 	
 	for (int i=0;i<N;i++){ //DEBUG
 		if (p[i].status != 'i'){
-			printf("o tipo do processo [ID=%d] eh: ",p[i].ID);
+			printf("\no tipo do processo [ID=%d] eh: ",p[i].ID);
 			if(p[i].tipo=='c'){
 				printf("CPU Bound\n");	
 			}else{
@@ -106,7 +109,7 @@ void escalonador(int N, processo *p, int escolha){
 				break;
 
 			}
-			printf("\n\n");
+			printf("\n");
 		}
 
 	}//FINAL DO DEBUG*/
@@ -204,6 +207,7 @@ void *novo_processo(void *thread_args2){
 				//printf("\n elapsed = %lf\n",elapsed);//DEBUG
 				p[i].status = 'n'; //(i -> n);
 				p[i].status = 'p'; //(n -> p);
+				printf("\n\nEntrada de Novo Processo de [ID=%d]\n",p[i].ID);
 				escalonador(N,p,escolha); //Sempre que um processo entra, o status muda, e ele precisa ser reescalonado.
 			}
 		}

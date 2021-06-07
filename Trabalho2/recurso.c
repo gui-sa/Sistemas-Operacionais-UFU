@@ -48,18 +48,14 @@ int main (int argc, char *argv[]){
 	thread_args1.esc = escolha;
 
 	//THREAD: TIMER funcao que povoa o vetor pronto (i -> n) e (n -> p)
-	/*
+	
 	pthread_t timer;
 
 	error = pthread_create(&timer, NULL, novo_processo, (void*) &thread_args1);
 	if (error != 0){
 		printf("Erro ao criar a thread timer");
 	}
-	*/
-
-	for (int i=0;i<N;i++){//prepara todos os processos nao comecam na fila de pronto... estao invisiveis.. 
-		p[i].status = 'p';
-	}
+	
 
 	//THREAD: CPU1
 	pthread_t cpu1;
