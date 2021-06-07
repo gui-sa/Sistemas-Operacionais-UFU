@@ -32,8 +32,8 @@ void *CPU(void *thread_args2){
 		}
 
 		p[i].status = 'e';
-		printf("\nprogresso [ID=%d]:%d/%d",p[i].ID, p[i].t_interrupt + 1, p[i].burst);
 		p[i].t_interrupt++;
+		printf("\nprogresso [ID=%d]:%d/%d",p[i].ID, p[i].t_interrupt, p[i].burst);
 		sleep(1);
 		p[i].status = 'p';		
 		if( p[i].t_interrupt >= p[i].burst){
@@ -42,8 +42,8 @@ void *CPU(void *thread_args2){
 		
 		int count = 0;
 		for (int z = 0;z<N;z++){
-			if(p[i].status == 'f'){
-			count++;
+			if(p[z].status == 'f'){
+				count++;
 			}	
 		}
 		if(count == N){
