@@ -7,64 +7,34 @@ Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
 */
 
 void SJF(int N,processo *p){
-    
 
-
-
-	unsigned int t=0; //tempo, controle da estatistica
+    	processo aux;
+	
 	estatistica *conta;
 	conta = malloc(N*sizeof(estatistica));
 
 
-	for (int i=0;i<N;i++){
-		if (p[i].status =='p'){
-			printf("\n\nvetor ordenado:\n");
-			for (int i=0;i<N;i++){ //DEBUG
-				printf("o tipo do processo [ID=%d] eh: ",p[i].ID);
-				if(p[i].tipo=='c'){
-					printf("CPU Bound\n");	
-				}else{
-					printf("I/O Bound\n");
-				}
-				printf("o burst do processo [ID=%d] eh: %d\n",p[i].ID,p[i].burst);
-				printf("o tempo burst de cpu [ID=%d] eh: %f\n",p[i].ID, round(p[i].burst*p[i].cpu/100.0));
-				printf("o tempo de entrada [ID=%d] eh: %d\n",p[i].ID,p[i].time_in);	
-				printf("o status do processo [ID=%d] eh: ",p[i].ID);
-				switch(p[i].status){
-					case 'n':
-					printf("NOVO\n");
-					break;
-
-					case 'p':
-					printf("PRONTO\n");
-					break;
-
-					case 'e':
-					printf("EXECUCAO\n");
-					break;
-
-					case 'b':
-					printf("ESPERA\n");
-					break;
-
-					case 'f':
-					printf("TERMINADO\n");
-					break;
-
-					default:
-					break;
-
-				}
-			printf("\n\n");
-			}//FINAL DO DEBUG*/
-
-			conta[i].ID = p[i].ID;
-			conta[i].t_init = t;
-			CPU(&p[i],&t);
-			conta[i].t_end = t;	
+	for (int j =0; j < N; j++){//Ordena os processos com indice de prioridade menor primeiro
+		for (int i = j+1; i < N; i++){
+			if ( p[j].burst > p[i].burst){
+				aux = p[j];
+				p[j] = p[i];
+				p[i] = aux;
+			}
 		}
 	}
+    
+}
 
+
+
+
+
+
+
+
+
+/*
 	for (int i=0;i<N;i++){ //DEBUG - só pra ver se funcionou
 		printf("o nome do processo [ID=%d] eh: %s\n",p[i].ID,p[i].nome);
 		printf("o burst do processo [ID=%d] eh: %d\n",p[i].ID,p[i].burst);
@@ -99,5 +69,4 @@ void SJF(int N,processo *p){
 	fclose(arqNome);
 	free(p);
 	free(conta);
-    
-}
+*/

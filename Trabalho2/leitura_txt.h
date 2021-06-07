@@ -30,6 +30,7 @@ int randomize_process(int N, processo *p){
 			p[i].burst = 1;
 		}
 		p[i].status = 'n';//no início todos os processos são novos
+		p[i].t_interrupt = 0;
 	}
 
 	for (int i=0;i<N;i++){//prepara todos os processos nao comecam na fila de pronto... estao invisiveis.. 

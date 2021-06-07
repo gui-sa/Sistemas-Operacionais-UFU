@@ -15,7 +15,6 @@ Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
 #include <pthread.h>
 #include "type.h"
 #include "cpu.c"
-//#include "SJF.h"
 //#include "prioridade.h"
 #include "leitura_txt.h"
 
@@ -39,23 +38,41 @@ int main (int argc, char *argv[]){
 	scanf("%d", &escolha);
 	printf("\n\n");
 
-	//THREAD: TIMER funcao que povoa o vetor pronto (i -> n) e (n -> p)
-	pthread_t timer;
+
+
+	
 	int error;
 	thread_args thread_args1;
 	thread_args1.Number = N;
 	thread_args1.proc = p;
 	thread_args1.esc = escolha;
 
+	//THREAD: TIMER funcao que povoa o vetor pronto (i -> n) e (n -> p)
+	/*
+	pthread_t timer;
+
 	error = pthread_create(&timer, NULL, novo_processo, (void*) &thread_args1);
 	if (error != 0){
 		printf("Erro ao criar a thread timer");
 	}
-	pthread_join(timer,NULL);
+	*/
+
+	for (int i=0;i<N;i++){//prepara todos os processos nao comecam na fila de pronto... estao invisiveis.. 
+		p[i].status = 'p';
+	}
+
 	//THREAD: CPU1
+	pthread_t cpu1;
+
+	error = pthread_create(&cpu1, NULL, CPU, (void*) &thread_args1);
+	if (error != 0){
+		printf("Erro ao criar a thread cpu 1");
+	}
+
 	//THREAD: CPU2	
 	
-	//escalonador(N,p,escolha);//NAO PODE TA AQUI!! --> CONSEQUENCIA // NAO EH UMA ACAO MAIS
+	//pthread_join(timer,NULL);
+	pthread_join(cpu1,NULL);
 
 	//FECHAMENTO ESTATISTICAS
 
