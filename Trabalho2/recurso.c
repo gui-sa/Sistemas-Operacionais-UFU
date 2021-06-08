@@ -15,7 +15,6 @@ Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
 #include <pthread.h>
 #include <semaphore.h>
 sem_t S;
-sem_t S2;
 
 #include "type.h"
 
@@ -57,9 +56,8 @@ int main (int argc, char *argv[]){
 	printf("\n\n");
 
 
-	sem_init(&S,1,1);//inicia a variavel do semaforo S=1
-	sem_init(&S2,0,1);//inicia a variavel do semaforo S2=0
-	
+	sem_init(&S,1,1);//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 	int error;
 	thread_args thread_args1;
 	thread_args1.Number = N;
