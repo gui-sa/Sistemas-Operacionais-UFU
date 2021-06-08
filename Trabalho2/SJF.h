@@ -16,7 +16,7 @@ void SJF(int N,processo *p){
 
 	for (int j =0; j < N; j++){//Ordena os processos com indice de prioridade menor primeiro
 		for (int i = j+1; i < N; i++){
-			if ( p[j].burst > p[i].burst){
+			if ( (p[j].burst - p[j].t_interrupt) > (p[i].burst-p[j].t_interrupt)){
 				aux = p[j];
 				p[j] = p[i];
 				p[i] = aux;

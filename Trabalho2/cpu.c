@@ -13,7 +13,7 @@ Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
 void *CPU(void *thread_args2){
 	while(1){
 		//void *thread_args ==> int N e o processo *p)
-
+		sem_wait(&S);
 		thread_args *thread_args1;
 		thread_args1 = (thread_args*)thread_args2;
 
@@ -35,12 +35,14 @@ void *CPU(void *thread_args2){
 			p[i].status = 'e';
 			p[i].t_interrupt++;
 			printf("\nprogresso [ID=%d]:%d/%d",p[i].ID, p[i].t_interrupt, p[i].burst);
+			sem_post(&S);
 			sleep(1);
+			sem_wait(&S);
 			p[i].status = 'p';		
 			if( p[i].t_interrupt >= p[i].burst){
 				p[i].status = 'f';
 			}
-			}
+		}
 		
 		
 		int count = 0;
@@ -49,9 +51,16 @@ void *CPU(void *thread_args2){
 				count++;
 			}	
 		}
+		//printf("\n%d",count);
 		if(count == N){
+			 printf("\n");
 			 break;
 		}
+		
+		sem_post(&S);
+		//sleep(0.1);
+		
+		
 		/* usar apenas um caractere (n)ovo, (p)ronto, (e)xecução, (b)loqueado, (f)inalizado , (i)nexistente.*/
 	}
 
@@ -184,13 +193,15 @@ void escalonador(int N, processo *p, int escolha){
 void *novo_processo(void *thread_args2){
 
 	//void *thread_args ==> int N e o processo *p)
-
+	sem_wait(&S);
+	
 	thread_args *thread_args1;
 	thread_args1 = (thread_args*)thread_args2;
 
 	int N = (int)thread_args1->Number;
 	processo *p = (processo*)thread_args1->proc;
 	int escolha = (int)thread_args1->esc;
+	sem_post(&S);
 	
 	//============================================
 
@@ -201,7 +212,7 @@ void *novo_processo(void *thread_args2){
 	while(elapsed <= 10){
 		current = clock();
 		elapsed = (double)(current - start)/CLOCKS_PER_SEC;
-
+		sem_wait(&S);
 		for(int i=0; i<N; i++){
 			if((p[i].time_in <= elapsed) & (p[i].status == 'i')){
 				//printf("\n elapsed = %lf\n",elapsed);//DEBUG
@@ -211,6 +222,6 @@ void *novo_processo(void *thread_args2){
 				escalonador(N,p,escolha); //Sempre que um processo entra, o status muda, e ele precisa ser reescalonado.
 			}
 		}
-		
+		sem_post(&S);
 	}
 }
