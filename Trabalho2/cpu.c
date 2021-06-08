@@ -10,10 +10,12 @@ Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
 #include "SJF.h"
 
 
-void *CPU(void *thread_args2){
+void *CPU1(void *thread_args2){
 	while(1){
 		//void *thread_args ==> int N e o processo *p)
 		sem_wait(&S);
+		sem_wait(&S2);
+		red();
 		thread_args *thread_args1;
 		thread_args1 = (thread_args*)thread_args2;
 
@@ -38,6 +40,7 @@ void *CPU(void *thread_args2){
 			sem_post(&S);
 			sleep(1);
 			sem_wait(&S);
+			red();
 			p[i].status = 'p';		
 			if( p[i].t_interrupt >= p[i].burst){
 				p[i].status = 'f';
@@ -52,12 +55,15 @@ void *CPU(void *thread_args2){
 			}	
 		}
 		//printf("\n%d",count);
+
 		if(count == N){
+			sem_post(&S2);
+			reset();
 			 printf("\n");
 			 break;
 		}
-		
-		sem_post(&S);
+		sem_post(&S2);
+		reset();
 		//sleep(0.1);
 		
 		
@@ -66,17 +72,76 @@ void *CPU(void *thread_args2){
 
 }
 
-			/*p[i]->status = 'e';
-			for ( int k=1; k<=p[i]->burst; k++){
-				printf(" progresso [ID=%d]:%d/%d",p[i]->ID, k, p[i]->burst);
-				for(int j=1; j<=k; j++) 
-					printf("# ");
-				for(int j=k+1; j<=p[i]->burst; j++) 
-					printf("- ");
-				printf("\n\a");
-				sleep(1);
+
+void *CPU2(void *thread_args2){
+	while(1){
+		//void *thread_args ==> int N e o processo *p)
+		sem_wait(&S);
+		sem_wait(&S2);
+		blue();
+		thread_args *thread_args1;
+		thread_args1 = (thread_args*)thread_args2;
+
+		int N = (int)thread_args1->Number;
+		processo *p = (processo*)thread_args1->proc;
+		int escolha = (int)thread_args1->esc;
+		
+		//============================================
+		
+		//percorrer a lista de pronto --> procurando por processos prontos
+		int i;
+		for (i = 0;i<N;i++){
+			if(p[i].status == 'p'){
+				break;
+			}	
+		}
+		
+		if(i!=N){
+			p[i].status = 'e';
+			p[i].t_interrupt++;
+			printf("\nprogresso [ID=%d]:%d/%d",p[i].ID, p[i].t_interrupt, p[i].burst);
+			sem_post(&S);
+			sleep(1);
+			sem_wait(&S);
+			blue();
+			p[i].status = 'p';		
+			if( p[i].t_interrupt >= p[i].burst){
+				p[i].status = 'f';
 			}
-			p->status = 'f';*/
+		}
+		
+		
+		int count = 0;
+		for (int z = 0;z<N;z++){
+			if(p[z].status == 'f'){
+				count++;
+			}	
+		}
+		//printf("\n%d",count);
+		
+		if(count == N){
+			sem_post(&S2);
+			reset();
+			 printf("\n");
+			 break;
+		}
+		sem_post(&S2);
+		reset();
+		
+		//sleep(0.1);
+		
+		
+		/* usar apenas um caractere (n)ovo, (p)ronto, (e)xecução, (b)loqueado, (f)inalizado , (i)nexistente.*/
+	}
+
+}
+
+
+
+
+
+
+
 
 void escalonador(int N, processo *p, int escolha){ 
 	
@@ -124,55 +189,7 @@ void escalonador(int N, processo *p, int escolha){
 	}//FINAL DO DEBUG*/
 	printf("\n___________________________________________________________________________\n");
 
-	/*for (int i=0;i<N;i++){// DEBUG DO TIMER 
-		p[i].status = 'i';
-	}
-
-	clock_t start = clock();
-	double elapsed = 0;
-	clock_t current = clock();
-
-	while(elapsed <= 10){
-		current = clock();
-	    	elapsed = (double)(current - start)/CLOCKS_PER_SEC;
-		
-		for(int i=0; i<N; i++){
-		    if((p[i].time_in <= elapsed) & (p[i].status == 'i')){
-		        printf("\n elapsed = %lf\n",elapsed);
-		        p[i].status = 'n';
-		        p[i].status = 'p';
-		        printf("o tempo de entrada [ID=%d] eh: %d\n",p[i].ID,p[i].time_in);	
-		        printf("o status do processo [ID=%d] eh: ",p[i].ID);
-		        switch(p[i].status){
-		            case 'n':
-		                printf("NOVO\n");
-		            break;
-
-		            case 'p':
-		                printf("PRONTO\n");
-		            break;
-
-		            case 'e':
-		                printf("EXECUCAO\n");
-		            break;
-
-		            case 'b':
-		                printf("ESPERA\n");
-		            break;
-
-		            case 'f':
-		                printf("TERMINADO\n");
-		            break;
-
-		            default:
-		            break;
-
-		        }
-		        printf("\n\n");
-		    
-		    }
-		}
-	}//FINAL DO DEBUG*/
+	
 
 	if (escolha==1){       
 		SJF(N,p);
@@ -191,7 +208,6 @@ void escalonador(int N, processo *p, int escolha){
 
 
 void *novo_processo(void *thread_args2){
-
 	//void *thread_args ==> int N e o processo *p)
 	sem_wait(&S);
 	
@@ -209,10 +225,11 @@ void *novo_processo(void *thread_args2){
 	double elapsed = 0;
 	clock_t current = clock();
 
-	while(elapsed <= 10){
+	while(1){
 		current = clock();
 		elapsed = (double)(current - start)/CLOCKS_PER_SEC;
-		sem_wait(&S);
+		sem_wait(&S2);
+		reset();
 		for(int i=0; i<N; i++){
 			if((p[i].time_in <= elapsed) & (p[i].status == 'i')){
 				//printf("\n elapsed = %lf\n",elapsed);//DEBUG
@@ -221,7 +238,22 @@ void *novo_processo(void *thread_args2){
 				printf("\n\nEntrada de Novo Processo de [ID=%d]\n",p[i].ID);
 				escalonador(N,p,escolha); //Sempre que um processo entra, o status muda, e ele precisa ser reescalonado.
 			}
+		
 		}
+		
+		int count = 0;
+		for (int z = 0;z<N;z++){
+			if(p[z].status == 'i'){
+				count++;
+			}	
+		}
+		//printf("\n%d",count);
+
 		sem_post(&S);
+		reset();
+		if(count == 0){
+			printf("Sem processos novos!\n");
+			break;
+		}
 	}
 }

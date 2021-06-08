@@ -15,11 +15,28 @@ Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
 #include <pthread.h>
 #include <semaphore.h>
 sem_t S;
+sem_t S2;
+
 #include "type.h"
+
+void red () {
+  printf("\033[1;31m");
+}
+
+void blue () {
+  printf("\033[0;34m");
+}
+
+void green () {
+  printf("\033[0;32m");
+}
+void reset () {
+  printf("\033[0m");
+}
+
 #include "cpu.c"
 //#include "prioridade.h"
 #include "leitura_txt.h"
-
 
 
 int main (int argc, char *argv[]){
@@ -41,6 +58,7 @@ int main (int argc, char *argv[]){
 
 
 	sem_init(&S,1,1);//inicia a variavel do semaforo S=1
+	sem_init(&S2,0,1);//inicia a variavel do semaforo S2=0
 	
 	int error;
 	thread_args thread_args1;
@@ -61,15 +79,23 @@ int main (int argc, char *argv[]){
 	//THREAD: CPU1
 	pthread_t cpu1;
 
-	error = pthread_create(&cpu1, NULL, CPU, (void*) &thread_args1);
+	error = pthread_create(&cpu1, NULL, CPU1, (void*) &thread_args1);
 	if (error != 0){
 		printf("Erro ao criar a thread cpu 1");
 	}
 
-	//THREAD: CPU2	
+	//THREAD: CPU2
+	pthread_t cpu2;
+
+	error = pthread_create(&cpu2, NULL, CPU2, (void*) &thread_args1);
+	if (error != 0){
+		printf("Erro ao criar a thread cpu 2");
+	}
+
 	
 	//pthread_join(timer,NULL);
 	pthread_join(cpu1,NULL);
+	pthread_join(cpu2,NULL);
 
 	//FECHAMENTO ESTATISTICAS
 
