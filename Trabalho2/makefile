@@ -5,12 +5,12 @@ CC=gcc
 CFLAGS=-I.
 
 #INFORMA ARQUIVOS HEAD PARA VERIFICAR MODIFICACAO
-DEPS = type.h leitura_txt.h cpu.c FCFS.h FCFS.c prioridade.h prioridade.c recurso.c
+DEPS = type.h randomizador.h cpu.c FCFS.h SJF.h prioridade.h RR.h
  
 #GERA O ARQUIVO OBJETO (.o) E FAZ A DEDPENDENCIA DOS ARQUIVOS .o com .h e .c
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 	
 #GERA O EXECUTAVEL PELA FUNCAO MAKE
-ex_prioridade: prioridade.o
-	$(CC) -o ex_prioridade prioridade.o $(CFLAGS)
+ex_recurso: recurso.o
+	$(CC) -pthread -o ex_recurso recurso.o -lm $(CFLAGS)

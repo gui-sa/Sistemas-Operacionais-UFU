@@ -36,7 +36,7 @@ void reset () {
 clock_t start;//inicio
 double elapsed;//tempo relativo
 #include "cpu.c"
-#include "leitura_txt.h"
+#include "randomizador.h"
 
 
 int main (int argc, char *argv[]){
@@ -106,7 +106,6 @@ int main (int argc, char *argv[]){
 	pthread_join(io,NULL);
 
 	//FECHAMENTO ESTATISTICAS
-	
 	printf("ESTATISTICAS:\n\n");
 	for (int i=0;i<N;i++){//DEBUG
 		printf("Tempo entrada na fila do pronto para o processo [ID=%d] eh: %d\n",p[i].ID,p[i].time_in);
@@ -114,24 +113,80 @@ int main (int argc, char *argv[]){
 		printf("Tempo de retorno para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_end);
 	}
 
-	FILE* arqNome = fopen("estatistica_SJF.txt","w");
-	float media_retorno = 0;
-	float media_espera = 0;
-	for (int i=0;i<N;i++){
-		fprintf(arqNome,"Tempo entrada na fila do pronto para o processo [ID=%d] eh: %d\n",p[i].ID,p[i].time_in);
-		fprintf(arqNome,"Tempo de inicio de execucao para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_init);
-		fprintf(arqNome,"Tempo de retorno para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_end);
-		fprintf(arqNome,"CPU burst [ID=%d] eh: %d\n", p[i].ID, p[i].burst);
-		media_retorno = media_retorno+(p[i].t_end-p[i].time_in);
-		media_espera = media_espera+(p[i].t_init-p[i].time_in);	
+	if(escolha==1){
+		FILE* arqNome = fopen("estatistica_SJF.txt","w");
+		float media_retorno = 0;
+		float media_espera = 0;
+		for (int i=0;i<N;i++){
+			fprintf(arqNome,"Tempo entrada na fila do pronto para o processo [ID=%d] eh: %d\n",p[i].ID,p[i].time_in);
+			fprintf(arqNome,"Tempo de inicio de execucao para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_init);
+			fprintf(arqNome,"Tempo de retorno para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_end);
+			fprintf(arqNome,"CPU burst [ID=%d] eh: %d\n", p[i].ID, p[i].burst);
+			media_retorno = media_retorno+(p[i].t_end-p[i].time_in);
+			media_espera = media_espera+(p[i].t_init-p[i].time_in);	
+		}
+		media_retorno = media_retorno/N;
+		media_espera = media_espera/N;
+		fprintf(arqNome,"\n\nTempo medio de espera eh: %f\n",media_espera);
+		fprintf(arqNome,"Tempo medio de retorno eh: %f\n",media_retorno);
+		fclose(arqNome);
+		free(p);
+	}else if(escolha==2){
+		FILE* arqNome = fopen("estatistica_FCFS.txt","w");
+		float media_retorno = 0;
+		float media_espera = 0;
+		for (int i=0;i<N;i++){
+			fprintf(arqNome,"Tempo entrada na fila do pronto para o processo [ID=%d] eh: %d\n",p[i].ID,p[i].time_in);
+			fprintf(arqNome,"Tempo de inicio de execucao para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_init);
+			fprintf(arqNome,"Tempo de retorno para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_end);
+			fprintf(arqNome,"CPU burst [ID=%d] eh: %d\n", p[i].ID, p[i].burst);
+			media_retorno = media_retorno+(p[i].t_end-p[i].time_in);
+			media_espera = media_espera+(p[i].t_init-p[i].time_in);	
+		}
+		media_retorno = media_retorno/N;
+		media_espera = media_espera/N;
+		fprintf(arqNome,"\n\nTempo medio de espera eh: %f\n",media_espera);
+		fprintf(arqNome,"Tempo medio de retorno eh: %f\n",media_retorno);
+		fclose(arqNome);
+		free(p);
+	}else if(escolha==3){
+		FILE* arqNome = fopen("estatistica_prioridade.txt","w");
+		float media_retorno = 0;
+		float media_espera = 0;
+		for (int i=0;i<N;i++){
+			fprintf(arqNome,"Tempo entrada na fila do pronto para o processo [ID=%d] eh: %d\n",p[i].ID,p[i].time_in);
+			fprintf(arqNome,"Tempo de inicio de execucao para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_init);
+			fprintf(arqNome,"Tempo de retorno para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_end);
+			fprintf(arqNome,"CPU burst [ID=%d] eh: %d\n", p[i].ID, p[i].burst);
+			media_retorno = media_retorno+(p[i].t_end-p[i].time_in);
+			media_espera = media_espera+(p[i].t_init-p[i].time_in);	
+		}
+		media_retorno = media_retorno/N;
+		media_espera = media_espera/N;
+		fprintf(arqNome,"\n\nTempo medio de espera eh: %f\n",media_espera);
+		fprintf(arqNome,"Tempo medio de retorno eh: %f\n",media_retorno);
+		fclose(arqNome);
+		free(p);
+	}else if(escolha==4){
+		FILE* arqNome = fopen("estatistica_RR.txt","w");
+		float media_retorno = 0;
+		float media_espera = 0;
+		for (int i=0;i<N;i++){
+			fprintf(arqNome,"Tempo entrada na fila do pronto para o processo [ID=%d] eh: %d\n",p[i].ID,p[i].time_in);
+			fprintf(arqNome,"Tempo de inicio de execucao para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_init);
+			fprintf(arqNome,"Tempo de retorno para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_end);
+			fprintf(arqNome,"CPU burst [ID=%d] eh: %d\n", p[i].ID, p[i].burst);
+			media_retorno = media_retorno+(p[i].t_end-p[i].time_in);
+			media_espera = media_espera+(p[i].t_init-p[i].time_in);	
+		}
+		media_retorno = media_retorno/N;
+		media_espera = media_espera/N;
+		fprintf(arqNome,"\n\nTempo medio de espera eh: %f\n",media_espera);
+		fprintf(arqNome,"Tempo medio de retorno eh: %f\n",media_retorno);
+		fclose(arqNome);
+		free(p);
 	}
-	media_retorno = media_retorno/N;
-	media_espera = media_espera/N;
-	fprintf(arqNome,"\n\nTempo medio de espera eh: %f\n",media_espera);
-	fprintf(arqNome,"Tempo medio de retorno eh: %f\n",media_retorno);
-	fclose(arqNome);
-
-	free(p);
+	
 	return 0;
 }  
 
