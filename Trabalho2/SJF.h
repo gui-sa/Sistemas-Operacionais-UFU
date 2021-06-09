@@ -9,11 +9,6 @@ Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
 void SJF(int N,processo *p){
 
     	processo aux;
-	
-	estatistica *conta;
-	conta = malloc(N*sizeof(estatistica));
-
-
 	for (int j =0; j < N; j++){//Ordena os processos com indice de prioridade menor primeiro
 		for (int i = j+1; i < N; i++){
 			if ( (p[j].burst - p[j].t_interrupt) > (p[i].burst-p[i].t_interrupt)){
