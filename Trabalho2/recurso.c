@@ -36,7 +36,6 @@ void reset () {
 clock_t start;//inicio
 double elapsed;//tempo relativo
 #include "cpu.c"
-//#include "prioridade.h"
 #include "leitura_txt.h"
 
 
@@ -53,7 +52,7 @@ int main (int argc, char *argv[]){
 
 
 	int escolha;
-	printf("Escolha o escalonador desejado [1] ou [2]:\n 1 - Shortest Job First (SJF)\n 2 - Round-Robin(RR)\n");
+	printf("Escolha o escalonador desejado [1,2,3 ou 4]:\n 1 - Shortest Job First (SJF)\n 2 - First-Come First-Served(FCFS)\n 3 - Prioridade\n 4 - Round-Robin(RR)\n");
 	scanf("%d", &escolha);
 	printf("\n\n");
 
@@ -117,17 +116,18 @@ int main (int argc, char *argv[]){
 
 	FILE* arqNome = fopen("estatistica_SJF.txt","w");
 	float media_retorno = 0;
-	float media_inicio = 0;
+	float media_espera = 0;
 	for (int i=0;i<N;i++){
 		fprintf(arqNome,"Tempo entrada na fila do pronto para o processo [ID=%d] eh: %d\n",p[i].ID,p[i].time_in);
 		fprintf(arqNome,"Tempo de inicio de execucao para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_init);
 		fprintf(arqNome,"Tempo de retorno para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_end);
+		fprintf(arqNome,"CPU burst [ID=%d] eh: %d\n", p[i].ID, p[i].burst);
 		media_retorno = media_retorno+(p[i].t_end-p[i].time_in);
-		media_inicio = media_inicio+(p[i].t_init-p[i].time_in);	
+		media_espera = media_espera+(p[i].t_init-p[i].time_in);	
 	}
 	media_retorno = media_retorno/N;
-	media_inicio = media_inicio/N;
-	fprintf(arqNome,"\n\nTempo medio de inicio eh: %f\n",media_inicio);
+	media_espera = media_espera/N;
+	fprintf(arqNome,"\n\nTempo medio de espera eh: %f\n",media_espera);
 	fprintf(arqNome,"Tempo medio de retorno eh: %f\n",media_retorno);
 	fclose(arqNome);
 

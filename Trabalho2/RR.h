@@ -6,12 +6,12 @@ Nome: Guilherme Salomao Agostini - Número: 11721EMT003
 Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
 */
 
-void prioridade(int N,processo *p){
+void RR(int N,processo *p){
 
     	processo aux;
 	for (int j =0; j < N; j++){//Ordena os processos com indice de prioridade menor primeiro
 		for (int i = j+1; i < N; i++){
-			if ( (p[j].prioridade) > (p[i].prioridade)){
+			if ( (p[j].time_in) > (p[i].time_in)){
 				aux = p[j];
 				p[j] = p[i];
 				p[i] = aux;

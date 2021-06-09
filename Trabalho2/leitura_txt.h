@@ -26,6 +26,7 @@ int randomize_process(int N, processo *p){
 		p[i].ID = i+1;
 		p[i].time_in = rand()%10;
 		p[i].burst = rand()%15;//10 eh o valor maximo
+		p[i].prioridade = rand()%5;
 		if (p[i].burst == 0){
 			p[i].burst = 1;
 		}
