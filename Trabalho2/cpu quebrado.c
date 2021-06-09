@@ -96,16 +96,15 @@ void *CPU1(void *thread_args2){
 			sem_wait(&S);
 			//percorrer a lista de pronto --> procurando por processos prontos
 			
-			for (i;i<N;i++){
+			for (;i<N;i++){
 				if(p[i].status == 'p'){
 					break;
 				}	
 			}
-
 			int check = 0;
-
+			//printf("\n%d",i);
 			if(i<N){
-				for(int q=0; q < 5; q++){
+				for(int q; q < 5; q++){
 					if(p[i].t_interrupt==0){
 						p[i].t_init=elapsed;//(double)(clock() - start)/CLOCKS_PER_SEC;	
 					}
@@ -132,18 +131,17 @@ void *CPU1(void *thread_args2){
 	
 				}
 				p[i].status = 'p';
+				i++;	
+			}
+			
+			if( p[i-1].t_interrupt >= round(p[i-1].burst*p[i-1].cpu/100.0)){
+				p[i-1].status = 'b';
 			}
 
-			if( p[i].t_interrupt >= round(p[i].burst*p[i].cpu/100.0)){
-				p[i].status = 'b';
+			if( p[i-1].t_interrupt >= p[i-1].burst){
+				p[i-1].status = 'f';
+				p[i-1].t_end=elapsed;//(double)(clock() - start)/CLOCKS_PER_SEC;
 			}
-
-			if( p[i].t_interrupt >= p[i].burst){
-				p[i].status = 'f';
-				p[i].t_end=elapsed;//(double)(clock() - start)/CLOCKS_PER_SEC;
-			}
-
-			i++;
 
 			if( i >= N){
 				i=0;
@@ -259,7 +257,7 @@ void *CPU2(void *thread_args2){
 			}
 			int check = 0;
 			if(i<N){
-				for(int q=0; q < 5; q++){
+				for(int q; q < 5; q++){
 					if(p[i].t_interrupt==0){
 						p[i].t_init=elapsed;//(double)(clock() - start)/CLOCKS_PER_SEC;	
 					}
@@ -285,19 +283,17 @@ void *CPU2(void *thread_args2){
 					}	
 				}
 				p[i].status = 'p';		
-
+				i++;
 			}
 
-			if( p[i].t_interrupt >= round(p[i].burst*p[i].cpu/100.0)){
-				p[i].status = 'b';
+			if( p[i-1].t_interrupt >= round(p[i-1].burst*p[i-1].cpu/100.0)){
+				p[i-1].status = 'b';
 			}
 
-			if( p[i].t_interrupt >= p[i].burst){
-				p[i].status = 'f';
-				p[i].t_end=elapsed;//(double)(clock() - start)/CLOCKS_PER_SEC;
+			if( p[i-1].t_interrupt >= p[i-1].burst){
+				p[i-1].status = 'f';
+				p[i-1].t_end=elapsed;//(double)(clock() - start)/CLOCKS_PER_SEC;
 			}
-			
-			i++;
 
 			if( i >= N){
 				i=0;
@@ -399,6 +395,7 @@ void *IO(void *thread_args2){
 	if (escolha==4){
 		int i=0;
 		while(1){
+			
 			sem_wait(&S);
 			//percorrer a lista de pronto --> procurando por processos prontos
 			
@@ -409,7 +406,7 @@ void *IO(void *thread_args2){
 			}
 			int check = 0;
 			if(i<N){
-				for(int q=0; q < 5; q++){
+				for(int q; q < 5; q++){
 					if(p[i].t_interrupt==0){
 						p[i].t_init=elapsed;//(double)(clock() - start)/CLOCKS_PER_SEC;	
 					}
@@ -435,18 +432,17 @@ void *IO(void *thread_args2){
 					}	
 				}	
 				p[i].status = 'b';
-
+				i++;
 			}
 
-			if( p[i].t_interrupt >= p[i].burst){
-				p[i].status = 'f';
-				p[i].t_end=elapsed;//(double)(clock() - start)/CLOCKS_PER_SEC;
+			if( p[i-1].t_interrupt >= p[i-1].burst){
+				p[i-1].status = 'f';
+				p[i-1].t_end=elapsed;//(double)(clock() - start)/CLOCKS_PER_SEC;
 			}
-			i++;
+			
 			if( i >= N){
 				i=0;
 			}
-
 
 			int count = 0;
 			for (int z = 0;z<N;z++){

@@ -21,3 +21,18 @@ void RR(int N,processo *p){
     
 }
 
+
+/*
+       rr
+P1 0    0
+P2 0    0
+P3 3    0
+P4 5    0
+
+
+t = 0
+p1 p2
+1  0
+
+*/
+
