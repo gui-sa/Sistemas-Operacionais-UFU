@@ -65,6 +65,18 @@ int main (int argc, char *argv[]){
 	thread_args1.proc = p;
 	thread_args1.esc = escolha;
 
+	
+	
+	
+	//THREAD: CLOCK
+	pthread_t cpu_clock;
+
+	error = pthread_create(&cpu_clock, NULL, CPU_CLOCK, NULL);
+	if (error != 0){
+		printf("Erro ao criar a thread CLOCK");
+	}
+	
+	
 	//THREAD: TIMER funcao que povoa o vetor pronto (i -> n) e (n -> p)
 	
 	pthread_t timer;
@@ -98,12 +110,14 @@ int main (int argc, char *argv[]){
 	if (error != 0){
 		printf("Erro ao criar a thread IO");
 	}
+	
 
 	
 	//pthread_join(timer,NULL);
 	pthread_join(cpu1,NULL);
 	pthread_join(cpu2,NULL);
 	pthread_join(io,NULL);
+	pthread_cancel(cpu_clock);
 
 	//FECHAMENTO ESTATISTICAS
 	printf("ESTATISTICAS:\n\n");

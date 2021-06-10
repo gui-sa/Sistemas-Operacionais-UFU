@@ -48,7 +48,9 @@ void *CPU1(void *thread_args2){
 				printf("\nprogresso [ID=%d]:%d/%d    tempo=%lf",p[i].ID, p[i].t_interrupt, p[i].burst,elapsed);
 				check = p[i].ID;
 				sem_post(&S);
-				sleep(1);
+				double anterior=elapsed;
+				while(elapsed-anterior<1.0){
+				}
 				sem_wait(&S);
 				if( check != p[i].ID){
 					for (int y =0; y < N; y++){
@@ -115,7 +117,9 @@ void *CPU1(void *thread_args2){
 					printf("\nprogresso [ID=%d]:%d/%d    tempo=%lf",p[i].ID, p[i].t_interrupt, p[i].burst,elapsed);
 					check = p[i].ID;
 					sem_post(&S);
-					sleep(1);
+					double anterior=elapsed;
+					while(elapsed-anterior<1.0){
+					}
 					sem_wait(&S);
 					if( check != p[i].ID){
 						for (int y =0; y < N; y++){
@@ -202,7 +206,9 @@ void *CPU2(void *thread_args2){
 				printf("\nprogresso [ID=%d]:%d/%d    tempo=%lf",p[i].ID, p[i].t_interrupt, p[i].burst,elapsed);
 				check = p[i].ID;
 				sem_post(&S);
-				sleep(1);
+				double anterior=elapsed;
+				while(elapsed-anterior<1.0){
+				}
 				sem_wait(&S);
 				if( check != p[i].ID){
 					for (int y =0; y < N; y++){
@@ -269,7 +275,9 @@ void *CPU2(void *thread_args2){
 					printf("\nprogresso [ID=%d]:%d/%d    tempo=%lf",p[i].ID, p[i].t_interrupt, p[i].burst,elapsed);
 					check = p[i].ID;
 					sem_post(&S);
-					sleep(1);
+					double anterior=elapsed;
+					while(elapsed-anterior<1.0){
+					}
 					sem_wait(&S);
 					if( check != p[i].ID){
 						for (int y =0; y < N; y++){
@@ -356,7 +364,9 @@ void *IO(void *thread_args2){
 				printf("\nprogresso [ID=%d]:%d/%d    tempo=%lf",p[i].ID, p[i].t_interrupt, p[i].burst,elapsed);
 				check = p[i].ID;
 				sem_post(&S);
-				sleep(1);
+				double anterior=elapsed;
+				while(elapsed-anterior<1.0){
+				}
 				sem_wait(&S);
 				if( check != p[i].ID){
 					for (int y =0; y < N; y++){
@@ -419,7 +429,9 @@ void *IO(void *thread_args2){
 					printf("\nprogresso [ID=%d]:%d/%d    tempo=%lf",p[i].ID, p[i].t_interrupt, p[i].burst,elapsed);
 					check = p[i].ID;
 					sem_post(&S);
-					sleep(1);
+					double anterior=elapsed;
+					while(elapsed-anterior<1.0){
+					}
 					sem_wait(&S);
 					if( check != p[i].ID){
 						for (int y =0; y < N; y++){
@@ -556,15 +568,8 @@ void *novo_processo(void *thread_args2){
 	sem_post(&S);
 	//============================================
 
-	start = clock();
-	elapsed = 0;
-	clock_t current = clock();
-
 	while(1){
 		sem_wait(&S);
-		reset();
-		current = clock();
-		elapsed = (double)(current - start)/CLOCKS_PER_SEC;
 		for(int i=0; i<N; i++){
 			if((p[i].time_in <= elapsed) & (p[i].status == 'i')){
 				printf("\n elapsed = %lf\n",elapsed);//DEBUG
@@ -591,3 +596,28 @@ void *novo_processo(void *thread_args2){
 		}
 	}
 }
+
+void* CPU_CLOCK (){
+	start = clock();
+	elapsed = 0;
+	clock_t current = clock();
+	reset();
+	while(1){
+		current = clock();
+		elapsed = (double)(current - start)/CLOCKS_PER_SEC/5;
+		//printf("\n%lf",elapsed);
+		}
+	int count = 0;
+		/*for (int z = 0;z<N;z++){
+			if(p[z].status == 'f'){
+				count++;
+			}	
+		}
+		//printf("\n%d",count);
+
+		sem_post(&S);
+		if(count == N){
+			printf("\nTimer finalizado\n");
+			break;
+		}*/
+	}
