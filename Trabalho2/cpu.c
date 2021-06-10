@@ -6,16 +6,14 @@ Nome: Guilherme Salomao Agostini - Número: 11721EMT003
 Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
 */
 
-//#include <unistd.h>
 #include "SJF.h"
 #include "FCFS.h"
 #include "prioridade.h"
 #include "RR.h"
 
 void *CPU1(void *thread_args2){
-	//void *thread_args ==> int N e o processo *p)
+	//void *thread_args ==> (int N, processo *p, int esc)
 	sem_wait(&S);
-	red();
 	thread_args *thread_args1;
 	thread_args1 = (thread_args*)thread_args2;
 
@@ -28,7 +26,6 @@ void *CPU1(void *thread_args2){
 	
 	if ((escolha==1) || (escolha==2) || (escolha==3) ){
 		while(1){
-			
 			sem_wait(&S);
 			//percorrer a lista de pronto --> procurando por processos prontos
 			int i;
@@ -40,12 +37,13 @@ void *CPU1(void *thread_args2){
 			int check = 0;
 			if(i!=N){
 				if(p[i].t_interrupt==0){
-					p[i].t_init=elapsed;//(double)(clock() - start)/CLOCKS_PER_SEC;	
+					p[i].t_init=elapsed;	
 				}
 				p[i].status = 'e';
 				p[i].t_interrupt++;
 				red();
 				printf("\nprogresso [ID=%d]:%d/%d    tempo=%lf",p[i].ID, p[i].t_interrupt, p[i].burst,elapsed);
+				reset();
 				check = p[i].ID;
 				sem_post(&S);
 				double anterior=elapsed;
@@ -60,18 +58,16 @@ void *CPU1(void *thread_args2){
 						}				
 					}
 				}
-				red();
 				p[i].status = 'p';		
 				if( p[i].t_interrupt >= round(p[i].burst*p[i].cpu/100.0)){
 					p[i].status = 'b';
 				}
 				if( p[i].t_interrupt >= p[i].burst){
 					p[i].status = 'f';
-					p[i].t_end=elapsed;//(double)(clock() - start)/CLOCKS_PER_SEC;
+					p[i].t_end=elapsed;
 				}
 			}
-			
-			
+		
 			int count = 0;
 			for (int z = 0;z<N;z++){
 				if(p[z].status == 'f'){
@@ -80,41 +76,37 @@ void *CPU1(void *thread_args2){
 			}
 
 			sem_post(&S);
-			reset();
 
 			if(count == N){
 				 printf("\n");
 				 break;
 			}	
-			
-			/* usar apenas um caractere (n)ovo, (p)ronto, (e)xecução, (b)loqueado, (f)inalizado , (i)nexistente.*/
+			//usar apenas um caractere (n)ovo, (p)ronto, (e)xecução, (b)loqueado, (f)inalizado , (i)nexistente
 		}
 	}
 	
-	if (escolha==4){
+	if (escolha==4){//RR
 		int i=0;
 		while(1){
-			
 			sem_wait(&S);
-			//percorrer a lista de pronto --> procurando por processos prontos
-			
+			//void *thread_args ==> (int N, processo *p, int esc)
 			for (i;i<N;i++){
 				if(p[i].status == 'p'){
 					break;
 				}	
 			}
-
 			int check = 0;
 
 			if(i<N){
-				for(int q=0; q < 5; q++){
+				for(int q=0; q < 5; q++){//quantum
 					if(p[i].t_interrupt==0){
-						p[i].t_init=elapsed;//(double)(clock() - start)/CLOCKS_PER_SEC;	
+						p[i].t_init=elapsed;	
 					}
 					p[i].status = 'e';
 					p[i].t_interrupt++;
 					red();
 					printf("\nprogresso [ID=%d]:%d/%d    tempo=%lf",p[i].ID, p[i].t_interrupt, p[i].burst,elapsed);
+					reset();
 					check = p[i].ID;
 					sem_post(&S);
 					double anterior=elapsed;
@@ -129,7 +121,6 @@ void *CPU1(void *thread_args2){
 							}				
 						}
 					}
-					red();
 					if( p[i].t_interrupt >= round(p[i].burst*p[i].cpu/100.0)){
 						break;
 					}
@@ -144,10 +135,10 @@ void *CPU1(void *thread_args2){
 
 			if( p[i].t_interrupt >= p[i].burst){
 				p[i].status = 'f';
-				p[i].t_end=elapsed;//(double)(clock() - start)/CLOCKS_PER_SEC;
+				p[i].t_end=elapsed;
 			}
 
-			i++;
+			i++;//passa pro proximo processo do RR
 
 			if( i >= N){
 				i=0;
@@ -161,22 +152,19 @@ void *CPU1(void *thread_args2){
 			}
 
 			sem_post(&S);
-			reset();
-
+			
 			if(count == N){
 				 printf("\n");
 				 break;
 			}	
-			
-			/* usar apenas um caractere (n)ovo, (p)ronto, (e)xecução, (b)loqueado, (f)inalizado , (i)nexistente.*/
+			//usar apenas um caractere (n)ovo, (p)ronto, (e)xecução, (b)loqueado, (f)inalizado , (i)nexistente
 		}
 	}
 }
 
 void *CPU2(void *thread_args2){
-	//void *thread_args ==> int N e o processo *p)
+	//void *thread_args ==> (int N, processo *p, int esc)
 	sem_wait(&S);
-	blue();
 	thread_args *thread_args1;
 	thread_args1 = (thread_args*)thread_args2;
 
@@ -198,12 +186,13 @@ void *CPU2(void *thread_args2){
 			int check = 0;
 			if(i!=N){
 				if(p[i].t_interrupt==0){
-					p[i].t_init=elapsed;//(double)(clock() - start)/CLOCKS_PER_SEC;	
+					p[i].t_init=elapsed;	
 				}
 				p[i].status = 'e';
 				p[i].t_interrupt++;
 				blue();
 				printf("\nprogresso [ID=%d]:%d/%d    tempo=%lf",p[i].ID, p[i].t_interrupt, p[i].burst,elapsed);
+				reset();
 				check = p[i].ID;
 				sem_post(&S);
 				double anterior=elapsed;
@@ -218,17 +207,15 @@ void *CPU2(void *thread_args2){
 						}				
 					}
 				}
-				blue();
 				p[i].status = 'p';		
 				if( p[i].t_interrupt >= round(p[i].burst*p[i].cpu/100.0)){
 					p[i].status = 'b';
 				}
 				if( p[i].t_interrupt >= p[i].burst){
 					p[i].status = 'f';
-					p[i].t_end=elapsed;//(double)(clock() - start)/CLOCKS_PER_SEC;
+					p[i].t_end=elapsed;
 				}
 			}
-			
 			
 			int count = 0;
 			for (int z = 0;z<N;z++){
@@ -238,23 +225,18 @@ void *CPU2(void *thread_args2){
 			}
 
 			sem_post(&S);
-			reset();
 
-			//printf("\n%d",count);
 			if(count == N){
 				 printf("\n");
 				 break;
 			}
-			
-			
-			/* usar apenas um caractere (n)ovo, (p)ronto, (e)xecução, (b)loqueado, (f)inalizado , (i)nexistente.*/
+			//usar apenas um caractere (n)ovo, (p)ronto, (e)xecução, (b)loqueado, (f)inalizado , (i)nexistente
 		}
 	}
 	
-	if (escolha==4){
+	if (escolha==4){//RR
 		int i=0;
 		while(1){
-			
 			sem_wait(&S);
 			//percorrer a lista de pronto --> procurando por processos prontos
 			
@@ -267,12 +249,13 @@ void *CPU2(void *thread_args2){
 			if(i<N){
 				for(int q=0; q < 5; q++){
 					if(p[i].t_interrupt==0){
-						p[i].t_init=elapsed;//(double)(clock() - start)/CLOCKS_PER_SEC;	
+						p[i].t_init=elapsed;
 					}
 					p[i].status = 'e';
 					p[i].t_interrupt++;
 					blue();
 					printf("\nprogresso [ID=%d]:%d/%d    tempo=%lf",p[i].ID, p[i].t_interrupt, p[i].burst,elapsed);
+					reset();
 					check = p[i].ID;
 					sem_post(&S);
 					double anterior=elapsed;
@@ -287,7 +270,6 @@ void *CPU2(void *thread_args2){
 							}				
 						}
 					}
-					blue();
 					if( p[i].t_interrupt >= round(p[i].burst*p[i].cpu/100.0)){
 						break;
 					}	
@@ -302,15 +284,14 @@ void *CPU2(void *thread_args2){
 
 			if( p[i].t_interrupt >= p[i].burst){
 				p[i].status = 'f';
-				p[i].t_end=elapsed;//(double)(clock() - start)/CLOCKS_PER_SEC;
+				p[i].t_end=elapsed;
 			}
 			
-			i++;
+			i++;//passa para o proximo processo do RR
 
 			if( i >= N){
 				i=0;
 			}
-
 
 			int count = 0;
 			for (int z = 0;z<N;z++){
@@ -320,23 +301,20 @@ void *CPU2(void *thread_args2){
 			}
 
 			sem_post(&S);
-			reset();
 
 			if(count == N){
 				 printf("\n");
 				 break;
 			}	
-			
-			/* usar apenas um caractere (n)ovo, (p)ronto, (e)xecução, (b)loqueado, (f)inalizado , (i)nexistente.*/
+			//usar apenas um caractere (n)ovo, (p)ronto, (e)xecução, (b)loqueado, (f)inalizado , (i)nexistente
 		}
 	}
 
 }
 
 void *IO(void *thread_args2){
-	//void *thread_args ==> int N e o processo *p)
+	//void *thread_args ==> (int N, processo *p, int esc)
 	sem_wait(&S);
-	green();
 	thread_args *thread_args1;
 	thread_args1 = (thread_args*)thread_args2;
 
@@ -362,6 +340,7 @@ void *IO(void *thread_args2){
 				p[i].t_interrupt++;
 				green();
 				printf("\nprogresso [ID=%d]:%d/%d    tempo=%lf",p[i].ID, p[i].t_interrupt, p[i].burst,elapsed);
+				reset();
 				check = p[i].ID;
 				sem_post(&S);
 				double anterior=elapsed;
@@ -376,14 +355,12 @@ void *IO(void *thread_args2){
 						}				
 					}
 				}
-				green();
 				p[i].status = 'b';		
 				if( p[i].t_interrupt >= p[i].burst){
 					p[i].status = 'f';
-					p[i].t_end=elapsed;//(double)(clock() - start)/CLOCKS_PER_SEC;
+					p[i].t_end=elapsed;
 				}
 			}
-			
 			
 			int count = 0;
 			for (int z = 0;z<N;z++){
@@ -393,20 +370,16 @@ void *IO(void *thread_args2){
 			}
 
 			sem_post(&S);
-			reset();
 
-			//printf("\n%d",count);
 			if(count == N){
 				 printf("\n");
 				 break;
-			}
-			
-			
-			/* usar apenas um caractere (n)ovo, (p)ronto, (e)xecução, (b)loqueado, (f)inalizado , (i)nexistente.*/
+			}		
+			//usar apenas um caractere (n)ovo, (p)ronto, (e)xecução, (b)loqueado, (f)inalizado , (i)nexistente
 		}
 	}
 	
-	if (escolha==4){
+	if (escolha==4){//RR
 		int i=0;
 		while(1){
 			sem_wait(&S);
@@ -421,12 +394,13 @@ void *IO(void *thread_args2){
 			if(i<N){
 				for(int q=0; q < 5; q++){
 					if(p[i].t_interrupt==0){
-						p[i].t_init=elapsed;//(double)(clock() - start)/CLOCKS_PER_SEC;	
+						p[i].t_init=elapsed;	
 					}
 					p[i].status = 'e';
 					p[i].t_interrupt++;
 					green();
 					printf("\nprogresso [ID=%d]:%d/%d    tempo=%lf",p[i].ID, p[i].t_interrupt, p[i].burst,elapsed);
+					reset();
 					check = p[i].ID;
 					sem_post(&S);
 					double anterior=elapsed;
@@ -440,8 +414,7 @@ void *IO(void *thread_args2){
 								break;
 							}				
 						}
-					}
-					green();	
+					}	
 					if( p[i].t_interrupt >= p[i].burst){
 						break;
 					}	
@@ -452,13 +425,12 @@ void *IO(void *thread_args2){
 
 			if( p[i].t_interrupt >= p[i].burst){
 				p[i].status = 'f';
-				p[i].t_end=elapsed;//(double)(clock() - start)/CLOCKS_PER_SEC;
+				p[i].t_end=elapsed;
 			}
-			i++;
+			i++;//passa para o proximo processo do RR
 			if( i >= N){
 				i=0;
 			}
-
 
 			int count = 0;
 			for (int z = 0;z<N;z++){
@@ -468,26 +440,21 @@ void *IO(void *thread_args2){
 			}
 
 			sem_post(&S);
-			reset();
 
 			if(count == N){
 				 printf("\n");
 				 break;
 			}	
-			
-			/* usar apenas um caractere (n)ovo, (p)ronto, (e)xecução, (b)loqueado, (f)inalizado , (i)nexistente.*/
+			//usar apenas um caractere (n)ovo, (p)ronto, (e)xecução, (b)loqueado, (f)inalizado , (i)nexistente
 		}
 	}
 
 }
 
 
-
-
-
 void escalonador(int N, processo *p, int escolha){ 
 	
-	for (int i=0;i<N;i++){ //DEBUG
+	for (int i=0;i<N;i++){
 		if (p[i].status != 'i'){
 			printf("\no tipo do processo [ID=%d] eh: ",p[i].ID);
 			if(p[i].tipo=='c'){
@@ -529,10 +496,8 @@ void escalonador(int N, processo *p, int escolha){
 			printf("\n");
 		}
 
-	}//FINAL DO DEBUG*/
+	}
 	printf("\n___________________________________________________________________________\n");
-
-	
 
 	if (escolha==1){       
 		SJF(N,p);
@@ -553,11 +518,8 @@ void escalonador(int N, processo *p, int escolha){
 }
 
 
-
-
-
-void *novo_processo(void *thread_args2){
-	//void *thread_args ==> int N e o processo *p)
+void *novo_processo(void *thread_args2){//muda o status dos BCP de inexistente para novo/pronto
+	//void *thread_args ==> (int N, processo *p, int esc)
 	sem_wait(&S);
 	thread_args *thread_args1;
 	thread_args1 = (thread_args*)thread_args2;
@@ -572,7 +534,7 @@ void *novo_processo(void *thread_args2){
 		sem_wait(&S);
 		for(int i=0; i<N; i++){
 			if((p[i].time_in <= elapsed) & (p[i].status == 'i')){
-				printf("\n elapsed = %lf\n",elapsed);//DEBUG
+				printf("\n elapsed = %lf\n",elapsed);//tempo do processo ao iniciar o cilco
 				p[i].status = 'n'; //(i -> n);
 				p[i].status = 'p'; //(n -> p);
 				printf("\n\nEntrada de Novo Processo de [ID=%d]\n",p[i].ID);
@@ -580,44 +542,16 @@ void *novo_processo(void *thread_args2){
 			}
 		
 		}
-		
-		int count = 0;
-		for (int z = 0;z<N;z++){
-			if(p[z].status == 'f'){
-				count++;
-			}	
-		}
-		//printf("\n%d",count);
-
 		sem_post(&S);
-		if(count == N){
-			printf("\nTimer finalizado\n");
-			break;
-		}
 	}
 }
 
-void* CPU_CLOCK (){
-	start = clock();
+void *CPU_CLOCK (){
 	elapsed = 0;
-	clock_t current = clock();
-	reset();
+	clock_gettime(CLOCK_MONOTONIC, &start);
+	clock_gettime(CLOCK_MONOTONIC, &finish);	
 	while(1){
-		current = clock();
-		elapsed = (double)(current - start)/CLOCKS_PER_SEC/5;
-		//printf("\n%lf",elapsed);
-		}
-	int count = 0;
-		/*for (int z = 0;z<N;z++){
-			if(p[z].status == 'f'){
-				count++;
-			}	
-		}
-		//printf("\n%d",count);
+		elapsed += (finish.tv_nsec - start.tv_nsec) / 10000000000.0;
+	}	
+}
 
-		sem_post(&S);
-		if(count == N){
-			printf("\nTimer finalizado\n");
-			break;
-		}*/
-	}

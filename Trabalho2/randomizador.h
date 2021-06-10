@@ -5,11 +5,6 @@ Nome: Enrico Sampaio Bonela - Número: 11721EMT007
 Nome: Guilherme Salomao Agostini - Número: 11721EMT003
 Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
 */
-
-
-
-
-
   
 int randomize_process(int N, processo *p){
 	int i;
@@ -25,7 +20,7 @@ int randomize_process(int N, processo *p){
 		}
 		p[i].ID = i+1;
 		p[i].time_in = rand()%10;
-		p[i].burst = rand()%15;//10 eh o valor maximo
+		p[i].burst = rand()%15;//15 eh o valor maximo
 		p[i].prioridade = rand()%5;
 		if (p[i].burst == 0){
 			p[i].burst = 1;

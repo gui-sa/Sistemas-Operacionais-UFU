@@ -33,8 +33,9 @@ void reset () {
   printf("\033[0m");
 }
 
-clock_t start;//inicio
+//clock_t start;//inicio
 double elapsed;//tempo relativo
+struct timespec start, finish;
 #include "cpu.c"
 #include "randomizador.h"
 
@@ -57,7 +58,7 @@ int main (int argc, char *argv[]){
 	printf("\n\n");
 
 
-	sem_init(&S,1,1);//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	sem_init(&S,1,1);//inicializa o semaforo
 
 	int error;
 	thread_args thread_args1;
@@ -70,26 +71,22 @@ int main (int argc, char *argv[]){
 	
 	//THREAD: CLOCK
 	pthread_t cpu_clock;
-
 	error = pthread_create(&cpu_clock, NULL, CPU_CLOCK, NULL);
 	if (error != 0){
 		printf("Erro ao criar a thread CLOCK");
 	}
 	
 	
-	//THREAD: TIMER funcao que povoa o vetor pronto (i -> n) e (n -> p)
-	
-	pthread_t timer;
-
-	error = pthread_create(&timer, NULL, novo_processo, (void*) &thread_args1);
+	//THREAD: preempcao funcao que povoa o vetor pronto (i -> n) e (n -> p)
+	pthread_t preempcao;
+	error = pthread_create(&preempcao, NULL, novo_processo, (void*) &thread_args1);
 	if (error != 0){
-		printf("Erro ao criar a thread timer");
+		printf("Erro ao criar a thread preempcao");
 	}
 	
 
 	//THREAD: CPU1
 	pthread_t cpu1;
-
 	error = pthread_create(&cpu1, NULL, CPU1, (void*) &thread_args1);
 	if (error != 0){
 		printf("Erro ao criar a thread cpu 1");
@@ -97,7 +94,6 @@ int main (int argc, char *argv[]){
 
 	//THREAD: CPU2
 	pthread_t cpu2;
-
 	error = pthread_create(&cpu2, NULL, CPU2, (void*) &thread_args1);
 	if (error != 0){
 		printf("Erro ao criar a thread cpu 2");
@@ -105,26 +101,24 @@ int main (int argc, char *argv[]){
 	
 	//THREAD: IO
 	pthread_t io;
-
 	error = pthread_create(&io, NULL, IO, (void*) &thread_args1);
 	if (error != 0){
 		printf("Erro ao criar a thread IO");
 	}
 	
-
-	
-	//pthread_join(timer,NULL);
+	//controle de threads
 	pthread_join(cpu1,NULL);
 	pthread_join(cpu2,NULL);
 	pthread_join(io,NULL);
 	pthread_cancel(cpu_clock);
+	pthread_cancel(preempcao);
 
 	//FECHAMENTO ESTATISTICAS
 	printf("ESTATISTICAS:\n\n");
-	for (int i=0;i<N;i++){//DEBUG
+	for (int i=0;i<N;i++){
 		printf("Tempo entrada na fila do pronto para o processo [ID=%d] eh: %d\n",p[i].ID,p[i].time_in);
 		printf("Tempo de inicio de execucao para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_init);
-		printf("Tempo de retorno para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_end);
+		printf("Tempo de retorno para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_end-p[i].time_in);
 	}
 
 	if(escolha==1){
@@ -134,7 +128,7 @@ int main (int argc, char *argv[]){
 		for (int i=0;i<N;i++){
 			fprintf(arqNome,"Tempo entrada na fila do pronto para o processo [ID=%d] eh: %d\n",p[i].ID,p[i].time_in);
 			fprintf(arqNome,"Tempo de inicio de execucao para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_init);
-			fprintf(arqNome,"Tempo de retorno para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_end);
+			fprintf(arqNome,"Tempo de retorno para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_end-p[i].time_in);
 			fprintf(arqNome,"CPU burst [ID=%d] eh: %d\n", p[i].ID, p[i].burst);
 			media_retorno = media_retorno+(p[i].t_end-p[i].time_in);
 			media_espera = media_espera+(p[i].t_init-p[i].time_in);	
@@ -152,7 +146,7 @@ int main (int argc, char *argv[]){
 		for (int i=0;i<N;i++){
 			fprintf(arqNome,"Tempo entrada na fila do pronto para o processo [ID=%d] eh: %d\n",p[i].ID,p[i].time_in);
 			fprintf(arqNome,"Tempo de inicio de execucao para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_init);
-			fprintf(arqNome,"Tempo de retorno para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_end);
+			fprintf(arqNome,"Tempo de retorno para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_end-p[i].time_in);
 			fprintf(arqNome,"CPU burst [ID=%d] eh: %d\n", p[i].ID, p[i].burst);
 			media_retorno = media_retorno+(p[i].t_end-p[i].time_in);
 			media_espera = media_espera+(p[i].t_init-p[i].time_in);	
@@ -170,7 +164,7 @@ int main (int argc, char *argv[]){
 		for (int i=0;i<N;i++){
 			fprintf(arqNome,"Tempo entrada na fila do pronto para o processo [ID=%d] eh: %d\n",p[i].ID,p[i].time_in);
 			fprintf(arqNome,"Tempo de inicio de execucao para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_init);
-			fprintf(arqNome,"Tempo de retorno para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_end);
+			fprintf(arqNome,"Tempo de retorno para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_end-p[i].time_in);
 			fprintf(arqNome,"CPU burst [ID=%d] eh: %d\n", p[i].ID, p[i].burst);
 			media_retorno = media_retorno+(p[i].t_end-p[i].time_in);
 			media_espera = media_espera+(p[i].t_init-p[i].time_in);	
@@ -188,7 +182,7 @@ int main (int argc, char *argv[]){
 		for (int i=0;i<N;i++){
 			fprintf(arqNome,"Tempo entrada na fila do pronto para o processo [ID=%d] eh: %d\n",p[i].ID,p[i].time_in);
 			fprintf(arqNome,"Tempo de inicio de execucao para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_init);
-			fprintf(arqNome,"Tempo de retorno para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_end);
+			fprintf(arqNome,"Tempo de retorno para o processo [ID=%d] eh: %lf\n",p[i].ID,p[i].t_end-p[i].time_in);
 			fprintf(arqNome,"CPU burst [ID=%d] eh: %d\n", p[i].ID, p[i].burst);
 			media_retorno = media_retorno+(p[i].t_end-p[i].time_in);
 			media_espera = media_espera+(p[i].t_init-p[i].time_in);	
@@ -203,31 +197,6 @@ int main (int argc, char *argv[]){
 	
 	return 0;
 }  
-
-    
-
-/*
-
-  --> p 
-  -->SE FOR I/O -- CPU: de p -> b
-  [ i, i, i, i, i, i, i, i]
-  -->Se for b -- I/O b -> be , ao finalizar o percentual i/o -> be para p e trocar tipo para cpu.bound
-
-
--------------------------------------- Ideia B ------------------------------------------------------
-  
-  [ p p p p p p p p] CPU1/CPU2 = sincronizacao
-    | $$ funcao atualizacao de listas  -- entrar na sincronizacao $$
-    |
-    v
-  [ f ] I/O
-
-	PROBLEMAS AO TRABALHAR COM VARIOS VETORES
-	>>PROBLEMAS: INTEGRIDADE
-
-
-*/
-
 
 /*
 COMPILACAO COM GCC
