@@ -1,106 +1,116 @@
 ﻿/*
 INTEGRANTES:
-Nome: Eduardo Marques da Silva 		- Número: 11721EMT018
+Nome: Eduardo Marques da Silva 	- Número: 11721EMT018
 Nome: Enrico Sampaio Bonela 		- Número: 11721EMT007
 Nome: Guilherme Salomao Agostini 	- Número: 11721EMT003
 Nome: Luiz Renato Rodrigues Carneiro 	- Número: 11721EMT004
-*/
+
 
 Consulte nosso git:  https://github.com/guilherme-salomao-agostini/random.git
 
 DOCUMENTAÇÃO:
-
-	Os arquivos de formato txt (tarefas2.txt e tarefas3.txt) são reservados para alterações e execução de testes.
 	
-	Os arquivos de formato txt (estatistica_FCFS.txt e estatistica_prioridade.txt) possuem apenas os calculos e estatisticas. Resultante dos algorítimos de escalonamento.
+	Todos os prints referentes as cores abaixo estão relacionados com os seguintes execuções:
+		Vermelho: CPU1;
+		Azul: CPU2;
+		Verde: IO;
+		Branco: Outros.
+	
+	Os arquivos de formato txt (estatistica_SJF.txt, estatistica_FCFS.txt, estatistica_prioridade.txt e estatistica_RR.txt) possuem apenas os calculos e estatisticas. Resultante dos algorítimos de escalonamento.
 
-	O type.h é um header que possui duas structs. A struct processo, representa o BCP e tem como variável global o tamanho do nome do processo. A struct estatistica tem todas as informações de tempo para possíveis cálculos.
+	O type.h é um header que possui duas structs. A struct processo, representa o BCP. A struct thread_args tem todas as informações que são importantes para a execução das threads.
 
-	O leitura_txt.h é um header que possui duas funções int:
-		int QuantProc(char *path):
-			path= string do caminho do arquivo que contém os processos;
-			retorna o número de processos contido nesse arquivo.
-		
-		int TxtRead(int N, processo *p, char *path)
+	O randomizador.h é um header que possui uma função int:		
+		int randomize_process(int N, processo *p)
 			N= número de processos calculado na função QuantProc;
 			p=ponteiro dinâmico de vetor struct contendo N instâncias (processos);
-			path= string do caminho do arquivo que contém os processos;
-			retorna -1 em caso de erro ou 0 caso não ocorra erro.
+			inicializa as variáveis do BCP de forma randomica;
+			retorna 0.
 
-	O recurso.c é um arquivo que possui duas funções:
-		void escalonador(int N, processo *pointer, int escolha)
-			N= número de processos calculado na função QuantProc;
-			pointer=ponteiro dinâmico de vetor struct contendo N instâncias (processos);
-			escolha= inteiro que representa o método escalanodor escolhido.
-
-		int main (int argc, char *argv[])
-			Pergunta ao usuários qual método de escalonamento ele pretende utilizar no arquivo tarefas.txt;
-			Obtem N chamando QuantProc;
-			Aloca o ponteiro dinâmico de struct processo;
-			Faz chamada da função TxtRead que fornecerá os dados da struct processo
-			Faz a chamada da função escalonador.
-				
-	O FCFS.c possui apenas a função principal (main):
-		int main(int argc, char *argv[])
-			Recebe como parâmetro o arquivo que contém os processos: o parâmetro será passado pelo terminal pelo usuário (exemplo: ./ex_FCFS tarefas.txt) 
-			Obtem N chamando QuantProc;
-			Aloca o ponteiro dinâmico de struct processo;
-			Faz chamada da função TxtRead que fornecerá os dados da struct processo;
-			Faz a chamada da função FCFS() contida no FCFS.h.
+	O recurso.c é o arquivo principal:
+		-Pergunta ao usuário quantos processos ele deseja executar;
+		-Gera o vetor de processos *p;
+		-Chama o randomize_process(N,p);
+		-Pergunta ao usuário qual escalonador utilizar;
+		-Inicia o semáforo, cria funções para alterar as cores dos prints e cria a variavel global de controle de tempo (elapsed);
+		-Cria as Threads para CPU1 (vermelho) , CPU2 (azul), IO (verde), CLOCK e preempcao (branco);
+		-Calculo da estatistica e geração dos arquivos txt para leitura.
 			
+	O SJF.h é um header que possui apenas a função SJF():
+		void SJF(int N,processo *p)
+			Escalona pelo método Shortest Job First;
+			Organiza da esquerda para a direita pelo menor tempo restante de execução (menor para maior).
+	
 	O FCFS.h é um header que possui apenas a função FCFS():
 		void FCFS(int N,processo *p)
-			Escalona pelo método First-Come First-Served que ordena pela ordem de chegada dos processos
-			Atualiza o status de todos os processos para pronto
-			Chama a função ProximaTarefa() que fará a execução dos processos;
-			Printa o BCP a cada fim de execução dos processos;
-			Escreve em um arquivo (estatistica_FCFS.txt) a estatica calculada do método.
+			Escalona pelo método First-Come First-Served;
+			Organiza da esquerda para a direita pelo tempo de chegada (menor para maior).
 	
-	O prioridade.c possui apenas a função principal (main):
-		int main(int argc, char *argv[])
-			Recebe como parâmetro o arquivo que contém os processos: o parâmetro será passado pelo terminal pelo usuário (exemplo: ./ex_prioridade tarefas.txt);
-			Obtem N chamando QuantProc;
-			Aloca o ponteiro dinâmico de struct processo;
-			Faz chamada da função TxtRead que fornecerá os dados da struct processo;
-			Faz a chamada da função prioridadeNP() contida no prioridade.h.
+	O prioridade.h é um header que possui apenas a função prioridade():
+		void prioridade(int N,processo *p)
+			Escalona pelo método prioridade preemptivo;
+			Organiza da esquerda para a direita pela prioridade (menor para maior, em que 0 = maior prioridade).
 			
-	O prioridade.h é um header que possui apenas a função prioridadeNP():
-		void prioridadeNP(int N, processo *p)
-			Escalona pelo método prioridade não preenpitiva que ordena os processos de prioridade maior (menor indice) primeiro;
-			Atualiza o status de todos os processos para pronto;
-			Chama a função ProximaTarefa() que fará a execução dos processos;
-			Printa o BCP a cada fim de execução dos processos;
-			Escreve em um arquivo (estatistica_prioridade.txt) a estatica calculada do método.
-
-	O cpu.c faz a "execução" dos processos chamados pelo método escalonador:
-		void ProximaTarefa (processo *p,int *t)
-			p=ponteiro dinâmico de vetor struct contendo N instâncias (processos);
-			t=tempo de CPU em número de ciclos (cada ciclo possui 1s) (o tempo de ciclo foi definido em 1s para facilitar a visualização do processo, mas pode ser facilmente alterado reduzindo o sleep de 1 para 0.001 para passar para ms);
-			Altera o status do processo para execução;
-			Printa o progresso do processo após cada ciclo de execução da CPU;
-			Ao final da execução altera o status do processo para finalizado.
+	O RR.h é um header que possui apenas a função RR():
+		void RR(int N,processo *p)
+			Escalona pelo método First-Come First-Served (futuramente será tratado diferente pela CPU.c);
+			Organiza da esquerda para a direita pelo tempo de chegada (menor para maior).
+	
+	O cpu.c faz a "execução" dos processos e controla o tempo:
+		*thread_args2= struct que carrega as variaveis de entrada da thread (int N, processo *p, int esc)
+		
+		As funções abaixo são executadas como threads:
+		cpu1: *CPU1(void *thread_args2);
+		cpu2: *CPU2(void *thread_args2);
+		io: *IO(void *thread_args2);
+		cpu_clock: *CPU_CLOCK();
+		preempcao: *novo_processo(void *thread_args2).
+		
+		void *CPU(void *thread_args2)
+			Existe uma versão para o SJF, FCFS e prioridade:
+				-Varre da esquerda para direita o vetor de processos (prontos), procurando por prontos;
+				-Ao encontrar o primeiro pronto ele executa o processo por 1s (1 ciclo), e o deixa no status executando;
+				-Caso o tempo de CPU seja executado restando somente o tempo de IO ele muda o status para bloqueado;
+				-Caso o tempo total de execução seja executado o processo muda o status pra finalizado;
+			Existe uma versão para o RR:
+				-Varre o vetor de processos (prontos), procurando por prontos;
+				-Ao encontrar o primeiro pronto ele executa o processo por 5s (1 quantum), e o deixa no status executando;
+				-Executa o próximo processo na fila de pronto;
+				-Quando chega no final da fila de pronto (canto direito) ele retorna para o início (canto esquerdo);
+				-Caso o tempo de CPU seja executado restando somente o tempo de IO ele muda o status para bloqueado;
+				-Caso o tempo total de execução seja executado o processo muda o status pra finalizado.
+		
+		void *IO(void *thread_args2)
+			Existe uma versão para o SJF, FCFS e prioridade:
+				-Varre da esquerda para direita o vetor de processos (prontos), procurando por bloqueados;
+				-Ao encontrar o primeiro bloqueado ele executa o processo por 1s (1 ciclo), e o deixa no status executando;
+				-Caso o tempo total de execução seja executado o processo muda o status pra finalizado;
+			Existe uma versão para o RR:
+				-Varre o vetor de processos (prontos), procurando por bloqueados;
+				-Ao encontrar o primeiro bloqueado ele executa o processo por 5s (1 quantum), e o deixa no status executando;
+				-Executa o próximo processo na fila de pronto;
+				-Quando chega no final da fila de pronto (canto direito) ele retorna para o início (canto esquerdo);
+				-Caso o tempo total de execução seja executado o processo muda o status pra finalizado.
+		
+		void *CPU_CLOCK ()
+			Funcao que controla o tempo a partir da variável global elapsed.
+			
+		void *novo_processo(void *thread_args2)
+			Varre o vetor de processo procurando por novos processos para gerar uma preempcao e atualizar a fila de processos prontos;
+			Chama a função escalonador(N,p,escolha).
+		
+		void escalonador(int N, processo *p, int escolha)
+			Printa o atual estado dos processos existentes;
+			Chama o escalonador escolhido pelo usuário.
+		
+		
 			
 	Para fazer as compilações dos programas e gerar os arquivos executáveis foram utilizados os arquivos makefile, que irão compilar o programa utilizando o compilador gcc, utilizando os arquivos contido no diterório atual, e retornando o arquivo executavel. Segue em exemplo a execução dos makefile:
-		make -f makefile_recurso
-			retorna o executavel ex_recurso
-		make -f makefile_FCFS
-			retorna o executavel ex_FCFS
-		make -f makefile_prioridade
-			retorna o executavel ex_prioridade
+		make
 	
 COMO UTILIZAR:
-	cd ../random/"Trabalho 1"
-	make -f makefile_recurso
-	make -f makefile_FCFS
-	make -f makefile_prioridade
-	
+	cd ../random/"Trabalho2"
+	make
 	./ex_recurso
-	./ex_FCFS tarefas.txt
-	./ex_prioridade tarefas.txt
-
-TESTES:
-	Foram feitos teste em todos os executáveis utilizando tarefas.txt tarefas2.txt tarefas3.txt.
-	Os resultados estão presentes Teste_FCFS_tarefas.txt, Teste_FCFS_tarefas2.txt e Teste_FCFS_tarefas3.txt
-	Os resultados estão presentes Teste_prioridade_tarefas.txt, Teste_prioridade_tarefas2.txt e Teste_prioridade_tarefas3.txt
 	
-	
+*/
