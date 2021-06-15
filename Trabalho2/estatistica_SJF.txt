@@ -1,20 +1,24 @@
-Tempo entrada na fila do pronto para o processo [ID=3] eh: 5
-Tempo de inicio de execucao para o processo [ID=3] eh: 5.000498
-Tempo de retorno para o processo [ID=3] eh: 3.000744
-CPU burst [ID=3] eh: 3
-Tempo entrada na fila do pronto para o processo [ID=1] eh: 4
-Tempo de inicio de execucao para o processo [ID=1] eh: 4.000070
-Tempo de retorno para o processo [ID=1] eh: 7.001171
-CPU burst [ID=1] eh: 7
-Tempo entrada na fila do pronto para o processo [ID=2] eh: 2
-Tempo de inicio de execucao para o processo [ID=2] eh: 2.000028
-Tempo de retorno para o processo [ID=2] eh: 13.001577
-CPU burst [ID=2] eh: 12
-Tempo entrada na fila do pronto para o processo [ID=4] eh: 5
-Tempo de inicio de execucao para o processo [ID=4] eh: 8.000865
-Tempo de retorno para o processo [ID=4] eh: 16.001857
-CPU burst [ID=4] eh: 13
+Tempo entrada na fila do pronto para o processo [ID=5] eh: 6
+Tempo de inicio de execucao para o processo [ID=5] eh: 6.000454
+Tempo de retorno para o processo [ID=5] eh: 1.000467
+CPU burst [ID=5] eh: 1
+Tempo entrada na fila do pronto para o processo [ID=4] eh: 6
+Tempo de inicio de execucao para o processo [ID=4] eh: 6.000493
+Tempo de retorno para o processo [ID=4] eh: 7.000923
+CPU burst [ID=4] eh: 6
+Tempo entrada na fila do pronto para o processo [ID=2] eh: 4
+Tempo de inicio de execucao para o processo [ID=2] eh: 4.000124
+Tempo de retorno para o processo [ID=2] eh: 12.001238
+CPU burst [ID=2] eh: 8
+Tempo entrada na fila do pronto para o processo [ID=3] eh: 3
+Tempo de inicio de execucao para o processo [ID=3] eh: 3.000117
+Tempo de retorno para o processo [ID=3] eh: 12.001001
+CPU burst [ID=3] eh: 10
+Tempo entrada na fila do pronto para o processo [ID=1] eh: 9
+Tempo de inicio de execucao para o processo [ID=1] eh: 9.000575
+Tempo de retorno para o processo [ID=1] eh: 17.001496
+CPU burst [ID=1] eh: 11
 
 
-Tempo medio de espera eh: 0.750366
-Tempo medio de retorno eh: 9.751337
+Tempo medio de espera eh: 0.000353
+Tempo medio de retorno eh: 9.801024

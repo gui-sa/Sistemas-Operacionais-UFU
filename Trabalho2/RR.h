@@ -9,7 +9,7 @@ Nome: Luiz Renato Rodrigues Carneiro - Número: 11721EMT004
 void RR(int N,processo *p){
 
     	processo aux;
-	for (int j =0; j < N; j++){//Ordena os processos com indice de prioridade menor primeiro
+	for (int j =0; j < N; j++){//Ordena os processos com menor tempo de chegada primeiro
 		for (int i = j+1; i < N; i++){
 			if ( (p[j].time_in) > (p[i].time_in)){
 				aux = p[j];
